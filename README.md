@@ -16,19 +16,15 @@ This approach demonstrates **scalable, cost-efficient cloud design** while provi
 ### Website Activation Flow (Cost Optimization)
 
 **Visitor clicks "Open Website" (resume link)**
-       |
-       v
+       ↓
  **StartWebsite Lambda**
-       |
-       v
+       ↓
  **EventBridge Scheduler triggers**
   - **Activates S3 static website hosting**
   - **Sets a 30-minute timer**
-       |
-       v
+       ↓
  **StopWebsite Lambda triggered**
-       |
-       v
+       ↓
   **S3 Website is disabled until next request**
 
 ### Description:
@@ -61,12 +57,13 @@ This approach demonstrates **scalable, cost-efficient cloud design** while provi
 - Portfolio Sections: About, Skills, Experience, Projects, Certifications, Resume, Video Resume, Education, Contact
 
 ### AWS Services Used
-- Service	Purpose	Advantages
-- S3	Static hosting for portfolio	Cost-efficient, globally available, highly durable
-- Lambda	Contact form logic & website activation	Serverless, scalable, pay-per-use
-- EventBridge Scheduler	Schedule automatic stop of website	Automation, precise timing, cost-saving
-- API Gateway	Connects website form to Lambda	Secure HTTP endpoint, handles CORS
-- SES	Sends portfolio messages	Reliable email delivery, verified sender ensures authenticity
+| Service                | Purpose                             | Advantages                                           |
+|------------------------|-------------------------------------|----------------------------------------------------|
+| S3                     | Static hosting for portfolio        | Cost-efficient, globally available, highly durable|
+| Lambda                 | Contact form logic & website activation | Serverless, scalable, pay-per-use                 |
+| EventBridge Scheduler  | Schedule automatic stop of website  | Automation, precise timing, cost-saving           |
+| API Gateway            | Connects website form to Lambda     | Secure HTTP endpoint, handles CORS                |
+| SES                    | Sends portfolio messages            | Reliable email delivery, verified sender ensures authenticity |
 
 
 ### Advantages
