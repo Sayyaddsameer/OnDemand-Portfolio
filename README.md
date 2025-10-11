@@ -15,17 +15,7 @@ This approach demonstrates **scalable, cost-efficient cloud design** while provi
 
 ### Website Activation Flow (Cost Optimization)
 
-**Visitor clicks "Open Website (resume link)"
-    |
-StartWebsite Lambda
-    |
-EventBridge Scheduler triggers
-    |
-Activates S3 static website hosting & sets 30-minute timer
-    |
-StopWebsite Lambda triggered
-    |
-S3 Website is disabled until next request**
+**Visitor clicks "Open Website (resume link)" → StartWebsite Lambda → EventBridge Scheduler triggers → Activates S3 static website hosting & sets 30-minute timer → StopWebsite Lambda triggered → S3 Website is disabled until next request**
 
 
 
