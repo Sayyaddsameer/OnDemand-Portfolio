@@ -876,59 +876,72 @@
             setActiveLink(document.querySelector('.nav-link[href="#hero"]'));
             
             // AWS Contact Form Logic
-            const contactForm = document.getElementById('contact-form');
-            const formStatus = document.getElementById('form-status');
-            const submitBtn = document.getElementById('submit-btn');
-            
-            contactForm.addEventListener('submit', function(e) {
-                e.preventDefault(); // Prevent the default form submission
-            
-                // ⚠️ PASTE YOUR AWS API GATEWAY INVOKE URL HERE
-                const apiEndpoint = 'PASTE_YOUR_INVOKE_URL_HERE/contact'; 
-            
-                const formData = new FormData(this);
-                const data = {};
-                formData.forEach((value, key) => {
-                    data[key] = value;
-                });
-            
-                // Show loading state
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-                formStatus.textContent = '';
-            
-                fetch(apiEndpoint, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data),
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        // If response is not 2xx, throw an error to be caught by .catch()
-                        return response.json().then(err => { throw new Error(err.message || 'Server error') });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    formStatus.textContent = "Message sent successfully! Thank you.";
-                    formStatus.style.color = 'green';
-                    contactForm.reset();
-                })
-                .catch(error => {
-                    formStatus.textContent = "An error occurred. Please try again later.";
-                    formStatus.style.color = 'red';
-                    console.error('Error:', error);
-                })
-                .finally(() => {
-                    // Restore button state
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
-                });
-            });
+    const contactForm = document.getElementById('contact-form');
+    const formStatus = document.getElementById('form-status');
+    const submitBtn = document.getElementById('submit-btn');
+
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+
+        // AWS API Gateway POST URL pointing to your Lambda
+        const apiEndpoint = 'https://2dubub6pbj.execute-api.us-east-1.amazonaws.com/contact';
+
+        // Collect form data
+        const formData = new FormData(this);
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
         });
-    </script>
+
+        // Basic validation
+        if (!data.name || !data.email || !data.message) {
+            formStatus.textContent = 'Please fill out all fields.';
+            formStatus.style.color = 'red';
+            return;
+        }
+
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        formStatus.textContent = '';
+
+        // Send data to Lambda via API Gateway
+        fetch(apiEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(async response => {
+            const respData = await response.json();
+            if (!response.ok) {
+                // If Lambda returned an error, throw it
+                throw new Error(respData.error || 'Server error');
+            }
+            return respData;
+        })
+        .then(respData => {
+            // Success
+            formStatus.textContent = respData.message || "Message sent successfully!";
+            formStatus.style.color = 'green';
+            contactForm.reset();
+        })
+        .catch(error => {
+            // Show error message
+            formStatus.textContent = error.message || "An error occurred. Please try again later.";
+            formStatus.style.color = 'red';
+            console.error('Error:', error);
+        })
+        .finally(() => {
+            // Restore button state
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+        });
+    });
+});
+</script>
+
 
 </body>
 </html>
