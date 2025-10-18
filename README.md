@@ -6,7 +6,8 @@ This is a modern, fully responsive personal portfolio website built to showcase 
 
 - **Dynamic “Message Me” form** using AWS Lambda + SES  
 - **Temporary website activation** using AWS Lambda + EventBridge Scheduler, limiting hosting to **30 minutes per session** for cost optimization  
-
+- **Notifications via AWS SNS** Portfolio owner receives an email whenever someone starts the website
+- 
 This approach demonstrates **scalable, cost-efficient cloud design** while providing a professional portfolio experience.
 
 ---
@@ -56,6 +57,7 @@ This approach demonstrates **scalable, cost-efficient cloud design** while provi
 | EventBridge Scheduler  | Schedule automatic stop of website  | Automation, precise timing, cost-saving           |
 | API Gateway            | Connects website form to Lambda     | Secure HTTP endpoint, handles CORS                |
 | SES                    | Sends portfolio messages            | Reliable email delivery, verified sender ensures authenticity |
+|SNS                     | Sends notifications to owner        | Immediate email alerts when website is accessed   |
 
 
 ### Advantages
