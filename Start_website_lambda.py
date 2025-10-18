@@ -1,6 +1,7 @@
 import boto3, json, os, uuid
 from datetime import datetime, timedelta, timezone
 
+sns = boto3.client('sns')
 s3 = boto3.client('s3')
 scheduler = boto3.client('scheduler')
 
@@ -35,6 +36,12 @@ def lambda_handler(event, context):
             'RoleArn': SCHEDULER_ROLE_ARN
         }
     )
+
+    sns.publish(
+    TopicArn='arn:aws:sns:us-east-1:785269092008:PortfolioSiteStarted',
+    Message='Someone just started your portfolio website!',
+    Subject='Portfolio Notification'
+)
 
     # redirect
     return {
