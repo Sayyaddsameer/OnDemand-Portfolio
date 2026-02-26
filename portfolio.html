@@ -808,11 +808,28 @@
                         <h3>On-Demand Serverless Portfolio</h3>
                         
                         <div style="font-size: 0.85rem; color: var(--light-text-color); margin-bottom: 15px; line-height: 1.5;">
-                            <p style="margin-bottom: 15px;"><strong>PROBLEM:</strong> Hosting static sites 24/7 incurs unnecessary cloud costs when traffic is intermittent.</p>
-                            <p style="margin-bottom: 15px;"><strong>SOLUTION:</strong> A "Scale-to-Zero" architecture that provisions infrastructure only when a visitor arrives.</p>
-                            <p style="border-left: 3px solid var(--primary-color-start); padding-left: 10px; margin-top: 10px;">
-                                <strong>KEY IMPLEMENTATION:</strong> Utilized <strong>AWS Lambda</strong> to spin up the site on-demand. Integrated <strong>EventBridge Scheduler</strong> to trigger a self-destruct sequence after 30 minutes of inactivity, ensuring exactly zero idle costs.
-                            </p>
+                            <p style="margin-bottom: 15px;">
+    <strong>PROBLEM STATEMENT:</strong> 
+    Many cloud architectures leave resources running continuously, even when traffic is intermittent. 
+    While static hosting like Amazon S3 is already highly cost-efficient, compute-heavy services 
+    (EC2, ECS/Fargate, containerized workloads) often incur unnecessary idle costs when not actively used.
+</p>
+
+<p style="margin-bottom: 15px;">
+    <strong>SOLUTION & ARCHITECTURE:</strong> 
+    Designed a scale-to-zero, event-driven lifecycle automation pattern that activates infrastructure 
+    only when required and automatically deactivates it after a defined time window.
+</p>
+
+<p style="border-left: 3px solid var(--primary-color-start); padding-left: 10px; margin-top: 10px;">
+    <strong>IMPLEMENTATION & COST CLARIFICATION:</strong> 
+    Implemented activation logic using <strong>AWS Lambda</strong>, with 
+    <strong>EventBridge Scheduler</strong> managing time-bound deactivation (30-minute window). 
+    This project applies a reusable start/stop automation pattern that can significantly reduce 
+    idle compute charges in real-world production environments involving continuously running 
+    infrastructure. The primary objective was to demonstrate event-driven lifecycle control 
+    and cost-aware cloud design principles rather than optimizing already minimal static hosting costs.
+</p>
                         </div>
 
                         <div style="margin-top: auto; margin-bottom: 35px;">
@@ -1186,6 +1203,7 @@ const apiEndpoint = `${API_BASE}/contact`;
     </script>
 </body>
 </html>
+
 
 
 
