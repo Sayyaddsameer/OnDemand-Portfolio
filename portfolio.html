@@ -809,26 +809,19 @@
                         
                         <div style="font-size: 0.85rem; color: var(--light-text-color); margin-bottom: 15px; line-height: 1.5;">
                             <p style="margin-bottom: 15px;">
-    <strong>PROBLEM STATEMENT:</strong> 
-    Many cloud architectures leave resources running continuously, even when traffic is intermittent. 
-    While static hosting like Amazon S3 is already highly cost-efficient, compute-heavy services 
-    (EC2, ECS/Fargate, containerized workloads) often incur unnecessary idle costs when not actively used.
+    <strong>PROBLEM:</strong> 
+    Cloud resources often remain active even during low or no traffic, leading to avoidable idle costs — especially for compute-heavy services like EC2 or containers.
 </p>
 
 <p style="margin-bottom: 15px;">
-    <strong>SOLUTION & ARCHITECTURE:</strong> 
-    Designed a scale-to-zero, event-driven lifecycle automation pattern that activates infrastructure 
-    only when required and automatically deactivates it after a defined time window.
+    <strong>SOLUTION:</strong> 
+    Designed a scale-to-zero, event-driven lifecycle automation pattern that activates infrastructure on demand and deactivates it after a fixed time window.
 </p>
 
 <p style="border-left: 3px solid var(--primary-color-start); padding-left: 10px; margin-top: 10px;">
-    <strong>IMPLEMENTATION & COST CLARIFICATION:</strong> 
-    Implemented activation logic using <strong>AWS Lambda</strong>, with 
-    <strong>EventBridge Scheduler</strong> managing time-bound deactivation (30-minute window). 
-    This project applies a reusable start/stop automation pattern that can significantly reduce 
-    idle compute charges in real-world production environments involving continuously running 
-    infrastructure. The primary objective was to demonstrate event-driven lifecycle control 
-    and cost-aware cloud design principles rather than optimizing already minimal static hosting costs.
+    <strong>IMPLEMENTATION & COST CONTEXT:</strong> 
+    Used <strong>AWS Lambda</strong> for activation logic and <strong>EventBridge Scheduler</strong> for timed shutdown (30 minutes). 
+    While S3 static hosting is already cost-efficient, this project demonstrates a reusable start/stop automation pattern applicable to compute-intensive workloads to eliminate idle infrastructure costs.
 </p>
                         </div>
 
@@ -1203,6 +1196,7 @@ const apiEndpoint = `${API_BASE}/contact`;
     </script>
 </body>
 </html>
+
 
 
 
