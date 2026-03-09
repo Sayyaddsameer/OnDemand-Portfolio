@@ -554,15 +554,20 @@
         <div class="section-separator"></div>
         
         <section id="about">
-            <div class="container hidden-animation">
-                <h2>About Me</h2>
-                <p class="section-subtitle" style="max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.8; color: var(--text-color);">
-                    Passionate <strong>Cloud & DevOps Engineer</strong> eager to apply technical expertise to solve real-world infrastructure challenges. 
-                    Specialized in <strong>AWS Serverless</strong> and <strong>Backend Automation</strong>, I focus on translating complex case studies into scalable, efficient solutions. 
-                    Committed to driving organizational growth and continuous technical evolution through hands-on engineering.
-                </p>
-            </div>
-        </section>
+    <div class="container hidden-animation">
+        <h2>About Me</h2>
+        <p class="section-subtitle" style="max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.8; color: var(--text-color);">
+            I'm a passionate <strong>Cloud &  Engineer</strong> with a strong interest in building scalable cloud-native systems. 
+            As an <strong>AWS Certified Developer – Associate</strong>, I specialize in designing and deploying 
+            <strong>serverless and event-driven architectures on AWS</strong>.
+            
+            I enjoy transforming complex technical ideas into practical solutions, focusing on 
+            <strong>backend automation, cloud infrastructure, and distributed systems</strong>. 
+            Through hands-on projects and continuous learning, I aim to build reliable systems 
+            that solve real-world engineering problems.
+        </p>
+    </div>
+</section>
         <div class="section-separator"></div>
 
         <section id="skills">
@@ -580,7 +585,7 @@
                     <div class="skill-card card hidden-animation" style="--i:6"><i class="fab fa-html5"></i><p>HTML & CSS</p></div>
                 </div>
 
-                <h3 class="hidden-animation" style="margin-top: 40px;"><center>DevOps & Cloud Tools</center></h3>
+                <h3 class="hidden-animation" style="margin-top: 40px;"><center> & Cloud Tools</center></h3>
                 <div class="skills-grid">
                     <div class="skill-card card hidden-animation" style="--i:1"><i class="fab fa-docker"></i><p>Docker</p></div>
                     <div class="skill-card card hidden-animation" style="--i:2"><i class="fas fa-cubes"></i><p>Kubernetes</p></div>
@@ -608,14 +613,16 @@
         <div class="timeline">
             <div class="timeline-item left hidden-animation">
                 <div class="timeline-content card">
-                    <h3>Cloud Intern</h3>
+                    <h3>AWS Cloud Intern</h3>
                     <p class="date">Technical Hub Pvt Ltd | May 2025 – June 2025</p>
                     <p>
-                        Completed a hands-on AWS Cloud internship focused on core infrastructure concepts.
-                        Worked with <strong>EC2</strong>, <strong>VPC Networking</strong>, <strong>IAM-based server proxy access</strong>,
-                        and the <strong>client–server model</strong>. Collaborated with mentors to deploy and
-                        understand real-world cloud environments, demonstrating strong responsibility and
-                        a willingness to learn.
+                        Completed a summer internship focused on foundational 
+                        <strong>AWS Cloud computing concepts</strong>. 
+                        Learned and practiced working with <strong>EC2 instances</strong>, 
+                        <strong>VPC networking</strong>, and <strong>IAM-based server proxy access</strong>. 
+                        Also studied the <strong>client–server model</strong> and the differences 
+                        between <strong>cloud and on-premises infrastructure</strong> while gaining 
+                        practical exposure to AWS environments under mentor guidance.
                     </p>
                 </div>
             </div>
@@ -1043,7 +1050,11 @@
 
             const subtitleEl = document.getElementById('subtitle');
             if(subtitleEl) {
-                const roles = ['Cloud & Backend Developer', 'DevOps Engineer', 'Competitive Programmer'];
+                const roles = [
+  'AWS Certified Developer – Associate',
+  'Cloud & Backend Developer',
+  'Competitive Programmer'
+];
                 let roleIndex = 0, charIndex = 0, isDeleting = false;
                 function type() {
                     const currentRole = roles[roleIndex];
@@ -1256,6 +1267,7 @@ const apiEndpoint = `${API_BASE}/contact`;
     </script>
 </body>
 </html>
+
 
 
 
