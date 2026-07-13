@@ -1,0 +1,16 @@
+# High-res image originals
+img/
+
+# Documentation build artifacts
+*.docx
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Vercel
+.vercel/

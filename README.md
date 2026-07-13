@@ -1,145 +1,209 @@
-# Personal Portfolio Website with AWS Serverless Architecture
+# On-Demand Portfolio
 
-## Overview
+[![Vercel](https://img.shields.io/badge/Live-Vercel-black?logo=vercel)](https://on-demand-portfolio-five.vercel.app)
+[![AWS](https://img.shields.io/badge/On--Demand-AWS%20Lambda-orange?logo=amazonaws)](https://2dubub6pbj.execute-api.us-east-1.amazonaws.com/start/)
+[![HTML](https://img.shields.io/badge/Built%20With-HTML%20%2B%20CSS%20%2B%20JS-blue)](#tech-stack)
 
-This project is a modern, fully responsive personal portfolio website built to showcase professional skills, projects, experience, and certifications.
+My personal portfolio website — but with a twist.
 
-Instead of deploying a traditional static site, this portfolio is architected as an **event-driven serverless application on Amazon Web Services (AWS)**. It demonstrates lifecycle automation, secure backend integration, and cloud-native design principles.
+On the surface, it's a clean, responsive single-page site that shows off my skills, projects, experience, and certifications. Under the hood, the whole thing is wired up as an event-driven serverless application on AWS with automated lifecycle management.
 
-The project incorporates AWS serverless services for:
+No frameworks. No build tools. Just one HTML file and a handful of Lambda functions.
 
-- **Dynamic “Message Me” form** using AWS Lambda + Amazon SES  
-- **Automated time-bound website activation** using AWS Lambda + EventBridge Scheduler  
-- **Visit notifications via Amazon SNS** (email alert when someone accesses the portfolio)
-
-This approach showcases scalable, automated, and production-aware cloud architecture while maintaining a seamless user experience.
-
----
-
-## Architecture & Control Flow
-
-### 1️. Website Activation Flow (Event-Driven Lifecycle Automation)
-
-**Visitor clicks "Open Website (resume link)" → StartWebsite Lambda → EventBridge Scheduler → S3 static hosting enabled + 30-minute timer set → StopWebsite Lambda triggered → S3 hosting disabled**
-
-### Flow Description
-
-- **StartWebsite Lambda**  
-  Triggered when a visitor clicks the resume/portfolio link. It enables S3 static website hosting and creates a scheduled event.
-
-- **EventBridge Scheduler**  
-  Automatically schedules the StopWebsite Lambda to execute after 30 minutes.
-
-- **StopWebsite Lambda**  
-  Disables S3 static website hosting after the activation window expires.
-
-- **Amazon SNS**  
-  Sends a notification to the portfolio owner whenever the website is activated.
-
-- **Outcome**  
-  The website becomes available for a 30-minute session and is automatically deactivated afterward, demonstrating automated lifecycle control.
+**Author:** Sameer Sayyad
+— [LinkedIn](https://www.linkedin.com/in/sameer-sayyad-673820291/) · [GitHub](https://github.com/Sayyaddsameer) · [sayyadsameerm3@gmail.com](mailto:sayyadsameerm3@gmail.com)
 
 ---
 
-### 2️. Contact Form Flow
+## Two Ways to Access the Portfolio
 
-**Visitor fills form → API Gateway → Lambda → Amazon SES → Inbox**
+### 1. Vercel — Always On
 
-#### Description
+**→ [on-demand-portfolio-five.vercel.app](https://on-demand-portfolio-five.vercel.app)**
 
-- Visitors do not require AWS accounts.
-- Lambda processes the request securely.
-- SES sends the email using a verified sender identity.
-- IAM roles ensure secure inter-service communication.
+This is the straightforward path. The portfolio is deployed on Vercel and is always accessible. No Lambda, no waiting — just open the link and you're in.
 
-This design provides a scalable and serverless backend with no persistent servers.
+### 2. AWS API Gateway — On-Demand (30-Minute Window)
+
+**→ [Start API](https://2dubub6pbj.execute-api.us-east-1.amazonaws.com/start/)**
+
+This is the interesting one. Clicking this link triggers an AWS Lambda function (`StartWebsite`) that:
+
+1. Makes the S3-hosted copy of the portfolio **public** by applying a bucket policy
+2. Sends me an **SNS email notification** (so I know someone visited)
+3. Schedules an **EventBridge one-shot timer** for 30 minutes from now
+4. **Redirects** you (302) to the actual S3 website URL
+
+After 30 minutes, the `StopWebsite` Lambda fires automatically and removes the bucket policy — making the site private again.
+
+If another visitor hits the Start API while the site is already up, the timer gets pushed out another 30 minutes. It's an upsert pattern — create-or-update the same EventBridge schedule. So the window stays open as long as people keep coming.
+
+### How to Verify the 30-Minute Window
+
+1. Open the [Start API URL](https://2dubub6pbj.execute-api.us-east-1.amazonaws.com/start/) in your browser. You'll get redirected to the portfolio.
+2. Wait 30 minutes (or check EventBridge Scheduler in the AWS Console — look for a schedule named `stop-portfolio-website`).
+3. After 30 minutes, `StopWebsite` Lambda removes the S3 public access policy.
+4. Try accessing the S3 website endpoint directly — you should get a **403 Forbidden**.
+5. Click the Start API link again — the site comes back up for another 30 minutes.
+
+You can also check **CloudWatch Logs** for the Start and Stop Lambda functions to see the exact invocation timestamps.
 
 ---
 
-## Cost Optimization Clarification
+## Architecture
 
-While Amazon S3 static hosting is already highly cost-efficient, the primary objective of this architecture was to demonstrate **event-driven lifecycle automation and time-bound resource control** using serverless AWS services.
+### Website Activation Flow
 
-In real-world production environments involving compute-heavy services such as EC2 instances, containerized workloads (ECS/Fargate), or other continuously running infrastructure, implementing a start/stop automation pattern can significantly reduce costs by eliminating idle compute charges.
+```
+Visitor clicks Start API
+    → StartWebsite Lambda
+        → Applies S3 bucket policy (site goes public)
+        → Schedules EventBridge timer (30 min)
+        → Sends SNS notification
+        → 302 redirect to S3 website
+    → [30 minutes later]
+        → StopWebsite Lambda fires
+        → Removes S3 bucket policy (site goes private)
+```
 
-This project applies that architectural pattern in a simplified context to showcase:
+### Contact Form Flow
 
-- Automated resource activation and deactivation
-- Event-driven scheduling using EventBridge
-- Infrastructure state management via Lambda
-- Cost-aware cloud design thinking
+```
+Visitor fills out form
+    → API Gateway endpoint
+        → Lambda function
+            → Amazon SES
+                → My inbox
+```
 
-The focus is on demonstrating scalable automation principles rather than minimizing already negligible static hosting costs.
+No AWS account needed on the visitor's side. Lambda handles everything with a verified SES sender identity.
+
+![Architecture Diagram](architecture/architecture_diagram.png)
+
+---
+
+## Tech Stack
+
+### Frontend
+
+- **HTML5, CSS3, Vanilla JavaScript** — all in a single file (`portfolio.html`)
+- **Google Fonts** (Inter)
+- **Font Awesome 6.5** icons
+- CSS custom properties for light/dark theming
+- `IntersectionObserver` for scroll-triggered animations
+- Parallax scrolling effects
+
+### Backend (AWS Serverless)
+
+- **AWS Lambda** — Start/Stop website lifecycle + SES contact form handler
+- **Amazon API Gateway** — HTTP endpoints for the start API and contact form
+- **Amazon EventBridge Scheduler** — 30-minute auto-stop timer
+- **Amazon SES** — Contact form email delivery
+- **Amazon SNS** — Visit notification alerts
+- **Amazon S3** — Static hosting for the on-demand path
+- **AWS IAM** — Least-privilege roles for all inter-service communication
+- **Amazon CloudWatch** — Logging and monitoring
+
+### Deployment
+
+- **Vercel** — Primary, always-on deployment
+- **AWS S3 + API Gateway** — On-demand path with lifecycle automation
 
 ---
 
 ## Features
 
-### Cloud & Backend Features
+- Fully responsive design (mobile, tablet, desktop)
+- Dark / Light theme toggle with `localStorage` persistence
+- Typewriter animation for professional roles
+- Parallax scrolling effects
+- Multiple scroll animations (fade-in, slide-in, scale-up) via `IntersectionObserver`
+- Scroll progress indicator
+- Cover-flow project showcase with snap scrolling
+- Interactive card hover effects with mouse-follow glow
+- Serverless contact form (API Gateway → Lambda → SES)
+- Honeypot spam protection on the contact form
+- Accessibility: `prefers-reduced-motion` support, semantic HTML, ARIA labels
 
-- Automated 30-minute website activation window
-- EventBridge-based scheduling
-- SNS email notification on website access
-- Serverless contact form (API Gateway + Lambda + SES)
-- IAM least-privilege access control
-- CloudWatch logging support
+### Sections
 
-### Frontend Features
+Hero · About · Skills · Experience · Education · Projects (6 featured) · Coding Portfolio · Certifications · Resume · Contact
 
-- Fully responsive design
-- Dark / Light theme toggle (LocalStorage)
-- Typing animation for professional roles
-- Scroll-based section highlighting and progress indicator
-- Interactive cards and animations
-- Portfolio sections:
-  - About
-  - Skills
-  - Experience
-  - Projects
-  - Certifications
-  - Resume
-  - Video Resume
-  - Education
-  - Contact
+---
+
+## Running Locally
+
+It's a single HTML file — there's no build step.
+
+```bash
+# Clone the repo
+git clone https://github.com/Sayyaddsameer/OnDemand-Portfolio.git
+cd OnDemand-Portfolio
+
+# Option 1: Just open the file
+# Double-click portfolio.html or drag it into your browser
+
+# Option 2: Local server (recommended)
+python -m http.server 8000
+# Then open http://localhost:8000/portfolio.html
+
+# Option 3: VS Code Live Server
+# Right-click portfolio.html → "Open with Live Server"
+```
+
+> **Note:** The contact form talks to the AWS backend (API Gateway → Lambda → SES), so it won't actually send emails when running locally. Everything else works fine offline.
 
 ---
 
 ## AWS Services Used
 
-| Service | Purpose | Advantages |
-|----------|----------|-------------|
-| Amazon S3 | Static hosting for portfolio | Durable, cost-efficient object storage |
-| AWS Lambda | Website activation & contact form logic | Serverless, scalable, pay-per-use compute |
-| Amazon EventBridge Scheduler | Automated stop trigger | Precise lifecycle automation |
-| Amazon API Gateway | Connects contact form to Lambda | Secure HTTP endpoint with CORS handling |
-| Amazon SES | Sends portfolio messages | Reliable transactional email delivery |
-| Amazon SNS | Sends activation notifications | Real-time email alerts |
-| AWS IAM | Access control between services | Secure least-privilege implementation |
-| Amazon CloudWatch | Logging & monitoring | Observability and debugging |
+| Service | Purpose |
+|---|---|
+| Amazon S3 | Static hosting for the on-demand portfolio path |
+| AWS Lambda | Website lifecycle automation + contact form handler |
+| EventBridge Scheduler | Auto-stop trigger after 30 minutes |
+| API Gateway | HTTP endpoints for start and contact APIs |
+| Amazon SES | Sends contact form emails |
+| Amazon SNS | Visit notification alerts |
+| AWS IAM | Least-privilege access control |
+| CloudWatch | Logging and monitoring |
 
 ---
 
-## Advantages of This Architecture
+## Project Structure
 
-- Demonstrates event-driven automation patterns
-- Eliminates need for persistent backend servers
-- Fully serverless and scalable
-- Secure service-to-service communication using IAM
-- Automated lifecycle management
-- Extendable to compute-based workloads for meaningful cost savings
-- Clean separation of frontend and backend components
+```
+OnDemand-Portfolio/
+├── portfolio.html              # The entire frontend — single file
+├── sameer.png                  # Profile photo
+├── sameer_resume.pdf           # Resume PDF
+├── vercel.json                 # Vercel deployment config
+├── robots.txt                  # Search engine directives
+├── architecture/
+│   ├── architecture_diagram.png
+│   ├── website_workflow.png
+│   └── contact_form_workflow.png
+├── Lambda_Functions/
+│   ├── Start_website_lambda.py
+│   ├── Stop_website_lambda.py
+│   └── send_messages_SES_lambda.py
+├── backend/                    # Documentation & annotated Lambda code
+│   ├── README.md
+│   ├── Start_website_lambda.py
+│   ├── Stop_website_lambda.py
+│   ├── send_messages_SES_lambda.py
+│   └── OnDemandPortfolio_Documentation.pdf
+└── img/                        # Project screenshots & assets
+```
 
 ---
 
-## Why This Project Matters
+## Why Build It This Way?
 
-This project goes beyond a traditional static portfolio website. It demonstrates:
+Honestly, S3 static hosting is already dirt cheap — so the on-demand pattern isn't really about saving money here. The point was to demonstrate **event-driven lifecycle automation** using real AWS services. In production scenarios with EC2 instances, ECS tasks, or other compute-heavy workloads, this same start/stop pattern can save serious money by eliminating idle resource charges.
 
-- Cloud-native architectural thinking
-- Serverless backend implementation
-- Infrastructure lifecycle automation
-- Secure API-based integrations
-- Cost-aware design principles
-- Practical AWS service orchestration
+This project applies that architectural thinking in a simplified context. It's a portfolio, but it's also a working demo of serverless orchestration, automated scheduling, and infrastructure state management.
 
-It reflects applied knowledge of designing scalable, automated, and production-conscious systems using AWS.
+---
+
+Built by [Sameer Sayyad](https://github.com/Sayyaddsameer) · Feel free to reach out at [sayyadsameerm3@gmail.com](mailto:sayyadsameerm3@gmail.com)
