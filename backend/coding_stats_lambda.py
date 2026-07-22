@@ -132,11 +132,11 @@ def _fetch_codeforces():
         raise RuntimeError('Codeforces API: non-OK status')
     cf = info['result'][0]
 
-    # Count unique accepted problems
+    # Count unique accepted problems — limit to last 5000 to avoid timeout
     solved = None
     try:
         status = json.loads(
-            _get(f'https://codeforces.com/api/user.status?handle={u}&from=1&count=100000', timeout=20)
+            _get(f'https://codeforces.com/api/user.status?handle={u}&from=1&count=5000', timeout=12)
         )
         if status['status'] == 'OK':
             solved = len({
@@ -145,7 +145,7 @@ def _fetch_codeforces():
                 if s.get('verdict') == 'OK'
             })
     except Exception:
-        pass
+        pass   # solved stays None — rating/rank still returned
 
     return {
         'platform':     'Codeforces',
@@ -161,159 +161,169 @@ def _fetch_codeforces():
 
 # ── CodeChef (__NEXT_DATA__ scrape + regex fallback) ──────────────────────────
 def _fetch_codechef():
-    u    = PROFILES['codechef']['username']
-    html = _get(f'https://www.codechef.com/users/{u}')
-    nd   = _next_data(html)
-    if nd:
-        # Try multiple possible paths for userDetails
-        ud = None
-        for path in [
-            ['props', 'pageProps', 'userDetails'],
-            ['props', 'pageProps', 'data', 'userDetails'],
-            ['props', 'pageProps', 'user'],
-        ]:
-            try:
-                obj = nd
-                for k in path:
-                    obj = obj[k]
-                if obj and isinstance(obj, dict):
-                    ud = obj
-                    break
-            except (KeyError, TypeError):
-                continue
+    u = PROFILES['codechef']['username']
 
-        if ud:
+    # CodeChef profile page is classic Drupal server-rendered HTML.
+    # Data is embedded directly in the HTML — no JS execution needed.
+    try:
+        html = _get(f'https://www.codechef.com/users/{u}')
+
+        def _ri(pat):
+            m = re.search(pat, html)
+            return int(m.group(1)) if m else None
+
+        # Current rating: <a href='...ratings/all' class='rating'>1407 (<span...
+        rating = _ri(r"class='rating'>\s*(\d+)\s*\(")
+
+        # Stars: username badge shows >2&#9733;</span> or >2★<  (1-7 stars)
+        # Try both HTML entity and literal Unicode star character
+        stars = _ri(r'>([1-7])&#9733;<') or _ri(r'>([1-7])★<')
+
+        # Global rank: <strong class='global-rank'>3220</strong>
+        global_rank = _ri(r"class='global-rank'>(\d+)</strong>")
+
+        # Total Problems Solved: <h3>Total Problems Solved: 632</h3>
+        solved = _ri(r"Total Problems Solved:\s*(\d+)")
+
+        # Highest rating is not directly shown; use a JS variable if present
+        max_rating = _ri(r'"highestRating"\s*:\s*(\d+)')
+
+        if rating or global_rank or solved:
             return {
-                'platform':    'CodeChef',
-                'url':         PROFILES['codechef']['url'],
-                'rating':      ud.get('currentRating') or ud.get('rating'),
-                'maxRating':   ud.get('highestRating') or ud.get('maxRating'),
-                'stars':       ud.get('stars'),
-                'globalRank':  ud.get('globalRank'),
-                'countryRank': ud.get('countryRank'),
-                'solved':      ud.get('totalProblems') or ud.get('solvedProblems'),
+                'platform':   'CodeChef',
+                'url':        PROFILES['codechef']['url'],
+                'rating':     rating,
+                'maxRating':  max_rating,
+                'stars':      stars if stars else None,   # never return 0
+                'globalRank': global_rank,
+                'solved':     solved,
             }
+    except Exception:
+        pass
 
-    # Regex fallback — look directly in HTML
-    def _ri(pat):
-        m = re.search(pat, html)
-        return int(m.group(1)) if m else None
+    # ── Env var fallback ──────────────────────────────────────────────────────
+    # If scraping fails, set these in AWS Lambda > Configuration > Environment variables:
+    #   CC_RATING, CC_MAX_RATING, CC_STARS, CC_GLOBAL_RANK, CC_SOLVED
+    def _ev(key):
+        v = os.environ.get(key)
+        return int(v) if v and v.isdigit() else None
 
-    # Also try to extract star count from rendered HTML (★ characters)
-    stars_val = None
-    sm = re.search(r'(\d+)\s*(?:★|\*\s*Star)', html, re.IGNORECASE)
-    if sm:
-        stars_val = int(sm.group(1))
-    else:
-        sm2 = re.search(r'"stars"\s*:\s*"?(\d+)"?', html)
-        if sm2:
-            stars_val = int(sm2.group(1))
-
+    rating = _ev('CC_RATING')
+    if rating is None:
+        raise RuntimeError('CodeChef: scraping failed and no env var fallback set.')
     return {
         'platform':   'CodeChef',
         'url':        PROFILES['codechef']['url'],
-        'rating':     _ri(r'"currentRating"\s*:\s*(\d+)') or _ri(r'rating["\s]*:\s*(\d+)'),
-        'maxRating':  _ri(r'"highestRating"\s*:\s*(\d+)'),
-        'stars':      stars_val,
-        'globalRank': _ri(r'"globalRank"\s*:\s*(\d+)'),
-        'solved':     _ri(r'"totalProblems"\s*:\s*(\d+)') or _ri(r'"solvedProblems"\s*:\s*(\d+)'),
+        'rating':     rating,
+        'maxRating':  _ev('CC_MAX_RATING'),
+        'stars':      _ev('CC_STARS'),
+        'globalRank': _ev('CC_GLOBAL_RANK'),
+        'solved':     _ev('CC_SOLVED'),
+        'fromEnv':    True,
     }
 
 
-# ── GeeksForGeeks (community API → __NEXT_DATA__ fallback) ────────────────────
+# ── GeeksForGeeks ─────────────────────────────────────────────────────────────
 def _fetch_gfg():
     u = PROFILES['gfg']['username']
 
-    # Primary: try multiple community stat API mirrors
+    # ── Primary: gfgstatscard.vercel.app (confirmed working ✅) ─────────────
+    # Returns: {"userHandle","total_score","total_problems_solved",
+    #           "pod_solved_current_streak","School","Basic","Easy","Medium","Hard",...}
+    try:
+        resp = json.loads(_get(
+            f'https://gfgstatscard.vercel.app/{u}?raw=true',
+            extra={'Accept': 'application/json'},
+            timeout=12
+        ))
+        school = resp.get('School', 0) or 0
+        basic  = resp.get('Basic',  0) or 0
+        easy   = resp.get('Easy',   0) or 0
+        medium = resp.get('Medium', 0) or 0
+        hard   = resp.get('Hard',   0) or 0
+        solved = resp.get('total_problems_solved') or (school + basic + easy + medium + hard) or None
+        score  = resp.get('total_score') or None
+        streak = resp.get('pod_solved_current_streak') or None
+
+        if solved or score:
+            return {
+                'platform':      'GeeksForGeeks',
+                'url':           PROFILES['gfg']['url'],
+                'solved':        solved,
+                'score':         score,
+                'instituteRank': None,   # not in this API
+                'streak':        streak,
+                'school':        school if school else None,
+                'basic':         basic  if basic  else None,
+                'easy':          easy   if easy   else None,
+                'medium':        medium if medium else None,
+                'hard':          hard   if hard   else None,
+            }
+    except Exception:
+        pass
+
+    # ── Fallback: geeks-for-geeks-stats-api.vercel.app ──────────────────────
     for api in [
+        f'https://geeks-for-geeks-stats-api.vercel.app/?userName={u}',
         f'https://geeks-for-geeks-api.vercel.app/api?userName={u}',
-        f'https://geeks-for-geeks-api.vercel.app/?raw=y&userName={u}',
-        f'https://gfgstatsapi.vercel.app/api/{u}',
-        f'https://gfg-api.vercel.app/api/{u}',
-        f'https://gfg-stats.vercel.app/api/user/{u}',
     ]:
         try:
             resp = json.loads(_get(api, extra={'Accept': 'application/json'}, timeout=10))
-            info = resp.get('info', {})
-            # Handle two common response shapes
+            if resp.get('error') or resp.get('message') == 'error':
+                continue
+            school = resp.get('School', 0) or 0
+            basic  = resp.get('Basic',  0) or 0
+            easy   = resp.get('Easy',   0) or 0
+            medium = resp.get('Medium', 0) or 0
+            hard   = resp.get('Hard',   0) or 0
             solved = (
                 resp.get('totalProblemsSolved')
-                or resp.get('problemsSolved')
-                or info.get('totalProblemsSolved')
+                or resp.get('total_problems_solved')
+                or (school + basic + easy + medium + hard)
+                or None
             )
-            if solved is not None or info.get('codingScore') is not None:
+            if solved:
                 return {
                     'platform':      'GeeksForGeeks',
                     'url':           PROFILES['gfg']['url'],
                     'solved':        solved,
-                    'score':         resp.get('codingScore') or info.get('codingScore'),
-                    'instituteRank': resp.get('instituteRank') or info.get('instituteRank'),
-                    'streak':        resp.get('streak') or resp.get('currentStreak'),
-                    'school':        resp.get('School') or resp.get('school'),
-                    'basic':         resp.get('Basic') or resp.get('basic'),
-                    'easy':          resp.get('Easy') or resp.get('easy'),
-                    'medium':        resp.get('Medium') or resp.get('medium'),
-                    'hard':          resp.get('Hard') or resp.get('hard'),
+                    'score':         resp.get('total_score') or resp.get('codingScore'),
+                    'instituteRank': resp.get('instituteRank'),
+                    'streak':        resp.get('pod_solved_current_streak') or resp.get('streak'),
+                    'school':        school if school else None,
+                    'basic':         basic  if basic  else None,
+                    'easy':          easy   if easy   else None,
+                    'medium':        medium if medium else None,
+                    'hard':          hard   if hard   else None,
                 }
         except Exception:
             continue
 
-    # Fallback: scrape __NEXT_DATA__ from multiple profile URL patterns
-    for profile_url in [
-        f'https://www.geeksforgeeks.org/user/{u}/',
-        f'https://www.geeksforgeeks.org/profile/{u}',
-        f'https://auth.geeksforgeeks.org/user/{u}/practice/',
-    ]:
-        try:
-            html = _get(profile_url)
-            nd   = _next_data(html)
-            if nd:
-                # Try multiple key paths
-                for p_path in [
-                    ['props', 'pageProps', 'userHandle'],
-                    ['props', 'pageProps', 'data'],
-                    ['props', 'pageProps'],
-                ]:
-                    try:
-                        p = nd
-                        for k in p_path:
-                            p = p[k]
-                        solved = (
-                            p.get('totalProblemsSolved')
-                            or p.get('problemsSolved')
-                        )
-                        if solved is not None or p.get('codingScore') is not None:
-                            return {
-                                'platform':      'GeeksForGeeks',
-                                'url':           PROFILES['gfg']['url'],
-                                'solved':        solved,
-                                'score':         p.get('codingScore'),
-                                'instituteRank': p.get('instituteRank'),
-                                'streak':        p.get('currentStreak') or p.get('streak'),
-                            }
-                    except (KeyError, TypeError):
-                        continue
+    # ── Last resort: env var fallback ────────────────────────────────────────
+    # Set in AWS Lambda > Configuration > Environment variables:
+    #   GFG_SOLVED, GFG_SCORE, GFG_RANK, GFG_STREAK, GFG_BASIC, GFG_EASY, GFG_MEDIUM, GFG_HARD
+    def _ev(key):
+        v = os.environ.get(key)
+        return int(v) if v and v.isdigit() else None
 
-            # Last resort: regex scan the raw HTML
-            def _rp(pat):
-                m = re.search(pat, html)
-                return int(m.group(1)) if m else None
-
-            solved  = _rp(r'"totalProblemsSolved"\s*:\s*(\d+)') or _rp(r'"problemsSolved"\s*:\s*(\d+)')
-            score   = _rp(r'"codingScore"\s*:\s*(\d+)')
-            rank    = _rp(r'"instituteRank"\s*:\s*(\d+)')
-            if solved or score:
-                return {
-                    'platform':      'GeeksForGeeks',
-                    'url':           PROFILES['gfg']['url'],
-                    'solved':        solved,
-                    'score':         score,
-                    'instituteRank': rank,
-                }
-        except Exception:
-            continue
-
-    raise RuntimeError('GFG: all fetch strategies failed')
+    solved = _ev('GFG_SOLVED')
+    score  = _ev('GFG_SCORE')
+    if solved is None and score is None:
+        raise RuntimeError('GFG: all APIs failed. Set GFG_SOLVED env var in Lambda as fallback.')
+    return {
+        'platform':      'GeeksForGeeks',
+        'url':           PROFILES['gfg']['url'],
+        'solved':        solved,
+        'score':         score,
+        'instituteRank': _ev('GFG_RANK'),
+        'streak':        _ev('GFG_STREAK'),
+        'school':        _ev('GFG_SCHOOL'),
+        'basic':         _ev('GFG_BASIC'),
+        'easy':          _ev('GFG_EASY'),
+        'medium':        _ev('GFG_MEDIUM'),
+        'hard':          _ev('GFG_HARD'),
+        'fromEnv':       True,
+    }
 
 
 # ── HackerRank (REST badge endpoint → scrape fallback) ────────────────────────
