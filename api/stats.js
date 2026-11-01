@@ -26,7 +26,7 @@ const FALLBACK = {
     platform: 'Codeforces',
     url: 'https://codeforces.com/profile/sayyad_sameer',
     rating: 880, maxRating: 880, rank: 'newbie', maxRank: 'newbie',
-    solved: 24, contribution: 0,
+    solved: 21, contribution: 0,
     source: 'fallback',
   },
   codechef: {
@@ -141,7 +141,7 @@ async function fetchCodeforces() {
           solved.add(key);
         }
       }
-      if (solved.size > 0) solvedCount = Math.max(solved.size, FALLBACK.codeforces.solved);
+      if (solved.size > 0) solvedCount = solved.size;
     }
   } catch (_) { /* use fallback solved count */ }
 
