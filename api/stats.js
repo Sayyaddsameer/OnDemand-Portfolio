@@ -32,13 +32,13 @@ const FALLBACK = {
   codechef: {
     platform: 'CodeChef',
     url: 'https://www.codechef.com/users/sayyadsameer',
-    rating: 1409, maxRating: 1409, stars: 2, globalRank: 4127, solved: 659,
+    rating: 1417, maxRating: 1428, stars: 2, globalRank: 3429, solved: 659,
     source: 'fallback',
   },
   gfg: {
     platform: 'GeeksForGeeks',
     url: 'https://www.geeksforgeeks.org/user/sayyadsameer/',
-    solved: 115, score: 115, basic: 32, easy: 65, medium: 17, hard: 1, streak: 5,
+    solved: 115, score: 219, basic: 32, easy: 65, medium: 17, hard: 1, streak: 0,
     source: 'fallback',
   },
   hackerrank: {
@@ -70,6 +70,8 @@ async function timedFetch(url, opts = {}, ms = 6000) {
     throw err;
   }
 }
+
+function parseInt10(v) { return parseInt(v, 10) || 0; }
 
 // ── Platform fetchers ───────────────────────────────────────────────
 
@@ -112,24 +114,36 @@ async function fetchLeetCode() {
 }
 
 async function fetchCodeforces() {
-  // Official Codeforces API
-  const [infoRes, statusRes] = await Promise.all([
-    timedFetch(`https://codeforces.com/api/user.info?handles=${USERNAMES.codeforces}`),
-    timedFetch(`https://codeforces.com/api/user.status?handle=${USERNAMES.codeforces}&from=1&count=10000`),
-  ]);
+  // Official Codeforces API — fetch info only (rating, rank)
+  // Solved count comes from user.status but can be unreliable for gym/virtual
+  // contests, so we also try the simpler approach
+  const infoRes = await timedFetch(
+    `https://codeforces.com/api/user.info?handles=${USERNAMES.codeforces}`
+  );
   const info = await infoRes.json();
-  const status = await statusRes.json();
+  if (info.status !== 'OK') throw new Error('CF info failed');
 
   const u = info.result[0];
-  // Count unique accepted problems
-  const solved = new Set();
-  if (status.status === 'OK') {
-    for (const sub of status.result) {
-      if (sub.verdict === 'OK') {
-        solved.add(`${sub.problem.contestId}-${sub.problem.index}`);
+
+  // Fetch solved count from user.status (all submissions)
+  let solvedCount = FALLBACK.codeforces.solved;
+  try {
+    const statusRes = await timedFetch(
+      `https://codeforces.com/api/user.status?handle=${USERNAMES.codeforces}`
+    );
+    const status = await statusRes.json();
+    if (status.status === 'OK') {
+      const solved = new Set();
+      for (const sub of status.result) {
+        if (sub.verdict === 'OK' && sub.problem) {
+          // Use problem name as key (more reliable than contestId which can be undefined for gym)
+          const key = sub.problem.name;
+          solved.add(key);
+        }
       }
+      if (solved.size > 0) solvedCount = solved.size;
     }
-  }
+  } catch (_) { /* use fallback solved count */ }
 
   return {
     platform: 'Codeforces',
@@ -138,78 +152,84 @@ async function fetchCodeforces() {
     maxRating: u.maxRating ?? 0,
     rank: u.rank || 'unrated',
     maxRank: u.maxRank || 'unrated',
-    solved: solved.size || FALLBACK.codeforces.solved,
+    solved: solvedCount,
     contribution: u.contribution || 0,
     source: 'live',
   };
 }
 
 async function fetchCodeChef() {
-  // Scrape CodeChef profile page for key metrics
+  // Scrape CodeChef profile page — patterns confirmed Nov 2026
   const res = await timedFetch(
     `https://www.codechef.com/users/${USERNAMES.codechef}`,
     { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; PortfolioBot/1.0)' } },
   );
   const html = await res.text();
 
-  const ratingMatch   = html.match(/class="rating-number"[^>]*>(\d+)/);
-  const starsMatch    = html.match(/class="rating-star"[^>]*>\s*(★+)/);
-  const solvedMatch   = html.match(/Total Problems Solved:\s*<[^>]*>(\d+)/i)
-                     || html.match(/problems-solved[^>]*>[\s\S]*?<h3[^>]*>(\d+)/);
-  const maxMatch      = html.match(/Highest Rating[^:]*:\s*<[^>]*>(\d+)/i);
-  const rankMatch     = html.match(/Global Rank[^:]*:\s*<[^>]*>(\d+)/i);
+  // Rating: <div class="rating-number">\n  1417  \n</div>
+  const ratingMatch = html.match(/class="rating-number">\s*(\d+)/);
+  // Highest: (Highest Rating 1428)
+  const maxMatch = html.match(/Highest Rating (\d+)/);
+  // Stars: class="rating-star"> <span ...>&#9733;</span> (count ★ entities)
+  const starsBlock = html.match(/rating-star">([\s\S]*?)<\/div/);
+  const starCount = starsBlock ? (starsBlock[1].match(/&#9733;|★/g) || []).length : null;
+  // Total Problems Solved: 659</h3>
+  const solvedMatch = html.match(/Total Problems Solved:\s*(\d+)/);
+  // Global Rank: <strong class='global-rank'>3429</strong>
+  const rankMatch = html.match(/class='global-rank'>(\d+)/);
 
-  const rating   = ratingMatch ? parseInt(ratingMatch[1], 10) : null;
-  const maxRating = maxMatch   ? parseInt(maxMatch[1], 10)    : rating;
-  const starCount = starsMatch ? starsMatch[1].length         : null;
-  const solved   = solvedMatch ? parseInt(solvedMatch[1], 10) : null;
-  const globalRank = rankMatch ? parseInt(rankMatch[1], 10)   : null;
+  const rating = ratingMatch ? parseInt10(ratingMatch[1]) : null;
+  const maxRating = maxMatch ? parseInt10(maxMatch[1]) : rating;
+  const solved = solvedMatch ? parseInt10(solvedMatch[1]) : null;
+  const globalRank = rankMatch ? parseInt10(rankMatch[1]) : null;
 
-  // If scraping yielded nothing useful, throw so fallback kicks in
+  // If we got at least the rating, consider it successful
   if (rating == null && solved == null) throw new Error('CodeChef scrape empty');
 
   return {
     platform: 'CodeChef',
     url: `https://www.codechef.com/users/${USERNAMES.codechef}`,
-    rating:    rating    ?? FALLBACK.codechef.rating,
-    maxRating: maxRating ?? FALLBACK.codechef.maxRating,
-    stars:     starCount ?? FALLBACK.codechef.stars,
+    rating:     rating     ?? FALLBACK.codechef.rating,
+    maxRating:  maxRating  ?? FALLBACK.codechef.maxRating,
+    stars:      starCount  ?? FALLBACK.codechef.stars,
     globalRank: globalRank ?? FALLBACK.codechef.globalRank,
-    solved:    solved    ?? FALLBACK.codechef.solved,
+    solved:     solved     ?? FALLBACK.codechef.solved,
     source: 'live',
   };
 }
 
 async function fetchGFG() {
-  // GFG practice-api profile endpoint
+  // GFG embeds profile data as escaped JSON in the HTML page (no separate API)
   const res = await timedFetch(
-    `https://www.geeksforgeeks.org/api/profilePage/?username=${USERNAMES.gfg}`,
+    `https://www.geeksforgeeks.org/user/${USERNAMES.gfg}/`,
     { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; PortfolioBot/1.0)' } },
   );
-  const json = await res.json();
+  const html = await res.text();
 
-  // Profile data lives at different nesting levels depending on GFG's API version
-  const info = json.profile_data || json;
-  const solveData = json.solvedStats || json.solved_stats || {};
+  // Extract key fields from the embedded escaped JSON
+  const grab = (key) => {
+    const re = new RegExp(`"${key}"\\s*:\\s*([\\d]+)`);
+    const m = html.match(re);
+    return m ? parseInt10(m[1]) : null;
+  };
 
-  // Parse difficulty counts from the nested structure
-  let basic = 0, easy = 0, medium = 0, hard = 0;
-  if (solveData.SCHOOL)  basic  = solveData.SCHOOL.count  || 0;
-  if (solveData.BASIC)   basic += solveData.BASIC.count   || 0;
-  if (solveData.EASY)    easy   = solveData.EASY.count    || 0;
-  if (solveData.MEDIUM)  medium = solveData.MEDIUM.count  || 0;
-  if (solveData.HARD)    hard   = solveData.HARD.count    || 0;
+  const solved = grab('total_problems_solved');
+  const score  = grab('score');
+  const streak = grab('pod_solved_current_streak');
+  const rank   = grab('institute_rank');
 
-  const solved = (info.total_problems_solved != null)
-    ? parseInt(info.total_problems_solved, 10)
-    : (basic + easy + medium + hard) || FALLBACK.gfg.solved;
-  const score  = parseInt(info.coding_score || info.overall_coding_score || 0, 10) || solved;
-  const streak = parseInt(info.current_streak || info.max_streak || 0, 10);
+  if (solved == null) throw new Error('GFG scrape empty');
 
   return {
     platform: 'GeeksForGeeks',
     url: `https://www.geeksforgeeks.org/user/${USERNAMES.gfg}/`,
-    solved, score, basic, easy, medium, hard, streak,
+    solved,
+    score:  score  ?? FALLBACK.gfg.score,
+    basic:  FALLBACK.gfg.basic,   // difficulty breakdown not in embedded JSON
+    easy:   FALLBACK.gfg.easy,
+    medium: FALLBACK.gfg.medium,
+    hard:   FALLBACK.gfg.hard,
+    streak: streak ?? FALLBACK.gfg.streak,
     source: 'live',
   };
 }
@@ -223,11 +243,14 @@ async function fetchHackerRank() {
   const json = await res.json();
   const models = json.models || [];
 
-  const badges = models.map(b => ({
+  // Filter to only skill badges (have stars > 0), skip challenge badges
+  const skillBadges = models.filter(b => (b.stars || 0) > 0);
+
+  const badges = skillBadges.map(b => ({
     name:     b.badge_name || b.badge_type || 'Unknown',
-    stars:    b.stars || b.current_points || 0,
+    stars:    b.stars || 0,
     solved:   b.solved || b.challenges_solved || 0,
-    category: b.categories ? b.categories.join(', ') : (b.domain || ''),
+    category: b.categories ? b.categories.join(', ') : (b.domain || 'Language Proficiency'),
   }));
 
   const totalStars = badges.reduce((s, b) => s + b.stars, 0);
