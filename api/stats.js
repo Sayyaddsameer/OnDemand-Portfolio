@@ -26,7 +26,7 @@ const FALLBACK = {
     platform: 'Codeforces',
     url: 'https://codeforces.com/profile/sayyad_sameer',
     rating: 880, maxRating: 880, rank: 'newbie', maxRank: 'newbie',
-    solved: 42, contribution: 0,
+    solved: 21, contribution: 0,
     source: 'fallback',
   },
   codechef: {
@@ -199,22 +199,24 @@ async function fetchCodeChef() {
 }
 
 async function fetchGFG() {
-  // GFG embeds profile data as escaped JSON in the HTML page (no separate API)
+  // GFG embeds profile data as triple-escaped JSON in the HTML page
+  // Keys appear as: \\\"total_problems_solved\\\":115
   const res = await timedFetch(
     `https://www.geeksforgeeks.org/user/${USERNAMES.gfg}/`,
     { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; PortfolioBot/1.0)' } },
   );
   const html = await res.text();
 
-  // Extract key fields from the embedded escaped JSON
+  // Match keys surrounded by escaped quotes: \\\"key\\\":value
   const grab = (key) => {
-    const re = new RegExp(`"${key}"\\s*:\\s*([\\d]+)`);
-    const m = html.match(re);
+    // Try triple-escaped pattern first (most common in GFG's SSR)
+    const re1 = new RegExp(`${key}[\\\\]*"?\\s*:\\s*(\\d+)`);
+    const m = html.match(re1);
     return m ? parseInt10(m[1]) : null;
   };
 
   const solved = grab('total_problems_solved');
-  const score  = grab('score');
+  const score  = grab('"?score');
   const streak = grab('pod_solved_current_streak');
   const rank   = grab('institute_rank');
 
