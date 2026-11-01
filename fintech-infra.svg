@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="tfBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#14233c"/>
+    </linearGradient>
+    <linearGradient id="tfGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#844fba"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <filter id="glow3" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  <rect width="800" height="450" fill="url(#tfBg)"/>
+  <circle cx="700" cy="80" r="140" fill="#844fba" opacity="0.14" filter="url(#glow3)"/>
+  <circle cx="100" cy="380" r="150" fill="#10b981" opacity="0.1" filter="url(#glow3)"/>
+
+  <!-- Pillars of Compliance -->
+  <g transform="translate(60, 90)">
+    <!-- Column 1: KMS Rotation -->
+    <rect x="20" y="20" width="190" height="120" rx="14" fill="#1e293b" stroke="#844fba" stroke-width="2" filter="url(#glow3)"/>
+    <text x="115" y="60" fill="#c084fc" font-family="Inter, sans-serif" font-size="16" font-weight="700" text-anchor="middle">AWS KMS (CMK)</text>
+    <text x="115" y="85" fill="#e2e8f0" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">Automated Key Rotation</text>
+    <text x="115" y="110" fill="#10b981" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle">enable_key_rotation = true</text>
+
+    <!-- Column 2: IAM Least Privilege -->
+    <rect x="245" y="10" width="200" height="140" rx="14" fill="#1e293b" stroke="#10b981" stroke-width="2.5" filter="url(#glow3)"/>
+    <text x="345" y="55" fill="#34d399" font-family="Inter, sans-serif" font-size="16" font-weight="700" text-anchor="middle">Zero-Wildcard IAM</text>
+    <text x="345" y="82" fill="#e2e8f0" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">Least-Privilege Roles</text>
+    <text x="345" y="105" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">Strict Resource Scoping</text>
+    <text x="345" y="128" fill="#38bdf8" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle">S3 Public Access Block</text>
+
+    <!-- Column 3: Bash Compliance Tests -->
+    <rect x="480" y="20" width="190" height="120" rx="14" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+    <text x="575" y="60" fill="#fbbf24" font-family="Inter, sans-serif" font-size="16" font-weight="700" text-anchor="middle">Compliance Audit</text>
+    <text x="575" y="85" fill="#e2e8f0" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">248-Line Bash Suite</text>
+    <text x="575" y="110" fill="#10b981" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle">7/7 Automated Checks</text>
+  </g>
+
+  <!-- Metric Pill -->
+  <g transform="translate(400, 280)">
+    <rect x="-210" y="0" width="420" height="42" rx="21" fill="#1e293b" stroke="#844fba" stroke-width="1.5"/>
+    <text x="0" y="26" fill="#c084fc" font-family="Inter, sans-serif" font-size="14" font-weight="600" text-anchor="middle">🛡️ 100% Terraform IaC · Enterprise Security Posture</text>
+  </g>
+
+  <!-- Titles -->
+  <text x="400" y="375" fill="#f8fafc" font-family="Inter, sans-serif" font-size="28" font-weight="800" text-anchor="middle">FinTech Compliance Infrastructure as Code</text>
+  <text x="400" y="405" fill="#94a3b8" font-family="Inter, sans-serif" font-size="14" font-weight="500" text-anchor="middle">Terraform · AWS KMS · Zero-Wildcard IAM · S3 PAB · Bash Audit Automation</text>
+</svg>

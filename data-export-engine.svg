@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0f1d"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="primary" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <circle cx="680" cy="90" r="140" fill="#6366f1" opacity="0.12" filter="url(#glow)"/>
+  <circle cx="120" cy="360" r="160" fill="#06b6d4" opacity="0.1" filter="url(#glow)"/>
+
+  <!-- Grid lines -->
+  <g stroke="#334155" stroke-width="1" opacity="0.25">
+    <line x1="80" y1="40" x2="80" y2="410"/>
+    <line x1="720" y1="40" x2="720" y2="410"/>
+    <line x1="40" y1="225" x2="760" y2="225"/>
+  </g>
+
+  <!-- Central Visual: Pipeline Streaming -->
+  <g transform="translate(100, 100)">
+    <!-- Source DB Box -->
+    <rect x="30" y="30" width="140" height="90" rx="12" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+    <text x="100" y="72" fill="#38bdf8" font-family="Inter, sans-serif" font-size="16" font-weight="700" text-anchor="middle">PostgreSQL</text>
+    <text x="100" y="94" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">Server Cursor</text>
+
+    <!-- Arrow / Stream Line -->
+    <path d="M 170 75 L 245 75" stroke="url(#primary)" stroke-width="4" stroke-dasharray="6,4"/>
+
+    <!-- Processing Box -->
+    <rect x="250" y="20" width="160" height="110" rx="12" fill="#1e293b" stroke="#6366f1" stroke-width="2.5" filter="url(#glow)"/>
+    <text x="330" y="60" fill="#a5b4fc" font-family="Inter, sans-serif" font-size="15" font-weight="700" text-anchor="middle">asyncpg Stream</text>
+    <text x="330" y="82" fill="#10b981" font-family="Inter, sans-serif" font-size="12" font-weight="600" text-anchor="middle">O(1) Memory</text>
+    <text x="330" y="104" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">Chunked Gzip</text>
+
+    <!-- Arrow -->
+    <path d="M 410 75 L 485 75" stroke="url(#primary)" stroke-width="4" stroke-dasharray="6,4"/>
+
+    <!-- Client Box -->
+    <rect x="490" y="30" width="130" height="90" rx="12" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+    <text x="555" y="72" fill="#10b981" font-family="Inter, sans-serif" font-size="16" font-weight="700" text-anchor="middle">Client HTTP</text>
+    <text x="555" y="94" fill="#94a3b8" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">Stream Output</text>
+  </g>
+
+  <!-- Memory Cap Badge -->
+  <g transform="translate(400, 275)">
+    <rect x="-180" y="0" width="360" height="42" rx="21" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="0" y="26" fill="#fbbf24" font-family="Inter, sans-serif" font-size="14" font-weight="600" text-anchor="middle">⚡ Docker Strict Memory Cap: 256MB</text>
+  </g>
+
+  <!-- Big Title Bottom -->
+  <text x="400" y="375" fill="#f8fafc" font-family="Inter, sans-serif" font-size="28" font-weight="800" text-anchor="middle">High-Throughput Data Export Engine</text>
+  <text x="400" y="405" fill="#94a3b8" font-family="Inter, sans-serif" font-size="14" font-weight="500" text-anchor="middle">Python · asyncpg · PostgreSQL Server-Side Cursors · Gzip Stream</text>
+</svg>

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="k8sBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a1224"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="vsGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#326ce5"/>
+      <stop offset="100%" stop-color="#008bb9"/>
+    </linearGradient>
+    <filter id="glow4" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  <rect width="800" height="450" fill="url(#k8sBg)"/>
+  <circle cx="180" cy="110" r="140" fill="#326ce5" opacity="0.14" filter="url(#glow4)"/>
+  <circle cx="620" cy="110" r="140" fill="#008bb9" opacity="0.14" filter="url(#glow4)"/>
+
+  <!-- Left Side: Kubernetes k3s -->
+  <g transform="translate(80, 75)">
+    <rect x="0" y="0" width="260" height="150" rx="14" fill="#1e293b" stroke="#326ce5" stroke-width="2.5" filter="url(#glow4)"/>
+    <text x="130" y="42" fill="#60a5fa" font-family="Inter, sans-serif" font-size="18" font-weight="700" text-anchor="middle">Kubernetes (k3s)</text>
+    <text x="130" y="70" fill="#e2e8f0" font-family="Inter, sans-serif" font-size="13" text-anchor="middle">Horizontal Pod Autoscaler (HPA)</text>
+    <text x="130" y="94" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">Rolling Zero-Downtime Updates</text>
+    <text x="130" y="122" fill="#10b981" font-family="Inter, sans-serif" font-size="12" font-weight="600" text-anchor="middle">Enterprise High-Scale Fit</text>
+  </g>
+
+  <!-- VS Badge -->
+  <g transform="translate(400, 150)">
+    <circle cx="0" cy="0" r="30" fill="#0f172a" stroke="#f59e0b" stroke-width="2" filter="url(#glow4)"/>
+    <text x="0" y="8" fill="#fbbf24" font-family="Inter, sans-serif" font-size="18" font-weight="800" text-anchor="middle">VS</text>
+  </g>
+
+  <!-- Right Side: Docker Swarm -->
+  <g transform="translate(460, 75)">
+    <rect x="0" y="0" width="260" height="150" rx="14" fill="#1e293b" stroke="#008bb9" stroke-width="2.5" filter="url(#glow4)"/>
+    <text x="130" y="42" fill="#38bdf8" font-family="Inter, sans-serif" font-size="18" font-weight="700" text-anchor="middle">Docker Swarm</text>
+    <text x="130" y="70" fill="#e2e8f0" font-family="Inter, sans-serif" font-size="13" text-anchor="middle">Native Overlay Mesh Routing</text>
+    <text x="130" y="94" fill="#94a3b8" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">Low-Overhead Architecture</text>
+    <text x="130" y="122" fill="#38bdf8" font-family="Inter, sans-serif" font-size="12" font-weight="600" text-anchor="middle">Rapid Convergence Latency</text>
+  </g>
+
+  <!-- Benchmark Harness Badge -->
+  <g transform="translate(400, 275)">
+    <rect x="-200" y="0" width="400" height="42" rx="21" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="0" y="26" fill="#fbbf24" font-family="Inter, sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊 Automated k6 Empirical Load Testing Suite</text>
+  </g>
+
+  <!-- Titles -->
+  <text x="400" y="375" fill="#f8fafc" font-family="Inter, sans-serif" font-size="28" font-weight="800" text-anchor="middle">Container Orchestration Scaling Benchmark</text>
+  <text x="400" y="405" fill="#94a3b8" font-family="Inter, sans-serif" font-size="14" font-weight="500" text-anchor="middle">Kubernetes (k3s) · Docker Swarm · HPA Autoscaling · k6 Benchmarking · Linux</text>
+</svg>

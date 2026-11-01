@@ -7,15 +7,15 @@
     <meta name="author" content="Sameer Sayyad">
 
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://on-demand-portfolio-five.vercel.app/">
+    <meta property="og:url" content="https://sameer-portfolio-phi.vercel.app/">
     <meta property="og:title" content="Sameer Sayyad | Cloud & DevOps Engineer">
     <meta property="og:description" content="Check out my technical projects, AWS architectures, and coding portfolio.">
-    <meta property="og:image" content="https://on-demand-portfolio-five.vercel.app/sameer.webp">
+    <meta property="og:image" content="https://sameer-portfolio-phi.vercel.app/sameer.webp">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Sameer Sayyad | Cloud & DevOps Engineer">
     <meta name="twitter:description" content="Check out my technical projects, AWS architectures, and coding portfolio.">
-    <meta name="twitter:image" content="https://on-demand-portfolio-five.vercel.app/sameer.webp">
+    <meta name="twitter:image" content="https://sameer-portfolio-phi.vercel.app/sameer.webp">
 
     <link rel="icon" type="image/webp" href="sameer.webp">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,34 +32,34 @@
            1. CSS VARIABLES & GENERAL STYLES
            ================================================================= */
         :root {
-            /* Light Theme (Default) */
+            /* Clean Crisp Modern Light */
             --primary-color-start: #4F46E5; /* Indigo */
-            --primary-color-end: #818CF8;
-            --secondary-color: #F0F4F8; /* Lighter off-white */
-            --text-color: #111827; /* Dark Gray */
-            --light-text-color: #4B5563;
+            --primary-color-end: #6366F1;
+            --secondary-color: #F8FAFC; /* Slate 50 */
+            --text-color: #0F172A; /* Slate 900 */
+            --light-text-color: #475569; /* Slate 600 */
             --bg-color: #FFFFFF;
-            --card-bg-color: #FFFFFF;
-            --border-color: #E5E7EB;
-            --header-bg: rgba(255, 255, 255, 0.8);
-            --shadow-color: rgba(0, 0, 0, 0.08);
+            --card-bg-color: rgba(255, 255, 255, 0.88);
+            --border-color: #E2E8F0;
+            --header-bg: rgba(255, 255, 255, 0.85);
+            --shadow-color: rgba(15, 23, 42, 0.08);
 
             --header-height: 70px;
             --border-radius: 12px;
         }
 
         body.dark-mode {
-            /* Dark Theme */
+            /* Linear Deep Obsidian (Modern High-Tech Dark) */
             --primary-color-start: #6366F1;
-            --primary-color-end: #A5B4FC;
-            --secondary-color: #1A202C;
-            --text-color: #E0E7FF;
+            --primary-color-end: #818CF8;
+            --secondary-color: #0F1117;
+            --text-color: #F3F4F6;
             --light-text-color: #9CA3AF;
-            --bg-color: #0F172A;
-            --card-bg-color: #1F2937;
-            --border-color: #374151;
-            --header-bg: rgba(15, 23, 42, 0.8);
-            --shadow-color: rgba(0, 0, 0, 0.3);
+            --bg-color: #08090C;
+            --card-bg-color: rgba(18, 20, 29, 0.78);
+            --border-color: rgba(255, 255, 255, 0.09);
+            --header-bg: rgba(8, 9, 12, 0.85);
+            --shadow-color: rgba(0, 0, 0, 0.5);
         }
 
         html { scroll-behavior: smooth; }
@@ -73,10 +73,17 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
+            background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+            background-size: 28px 28px;
             color: var(--text-color);
             line-height: 1.75;
             overflow-x: hidden;
             transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+            background-size: 28px 28px;
         }
         
         main > section {
@@ -118,6 +125,8 @@
         }
 
         .btn {
+            position: relative;
+            overflow: hidden;
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -132,10 +141,27 @@
             border: none;
         }
 
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 40%;
+            height: 200%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.25), transparent);
+            transform: rotate(30deg);
+            transition: all 0.7s ease;
+            pointer-events: none;
+        }
+
+        .btn:hover::after {
+            left: 130%;
+        }
+
         .btn:hover {
             background-position: right center;
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px var(--shadow-color);
+            box-shadow: 0 12px 24px var(--shadow-color);
         }
         
         .btn-secondary {
@@ -145,11 +171,15 @@
             border: 2px solid var(--primary-color-start);
             box-shadow: none;
         }
+
+        .btn-secondary::after {
+            display: none;
+        }
         
         .btn-secondary:hover {
             background-color: var(--primary-color-start);
             color: #fff;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
         }
 
         #progress-bar {
@@ -256,39 +286,103 @@
         .hero-image { flex-shrink: 0; position: relative; }
         .profile-photo {
             width: 280px; height: 280px; border-radius: 50%; object-fit: cover;
-            border: 5px solid var(--primary-color-start); box-shadow: 0 0 40px var(--primary-color-start);
-            animation: pulse 2s infinite;
+            border: 4px solid var(--primary-color-start);
+            box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.2), 0 20px 45px rgba(99, 102, 241, 0.35);
+            animation: pulseGlow 3s ease-in-out infinite;
         }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 30px var(--primary-color-start); }
-            50% { box-shadow: 0 0 50px var(--primary-color-end); }
-            100% { box-shadow: 0 0 30px var(--primary-color-start); }
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.2), 0 20px 40px rgba(99, 102, 241, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(129, 140, 248, 0.3), 0 25px 55px rgba(129, 140, 248, 0.45);
+            }
         }
         .background-blob {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 700px; height: 700px;
-            background: radial-gradient(circle, rgba(79, 70, 229, 0.08) 0%, rgba(79, 70, 229, 0) 70%);
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(99, 102, 241, 0) 70%);
             z-index: -1; animation: spin 25s linear infinite;
         }
-        .dark-mode .background-blob { background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, rgba(99, 102, 241, 0) 70%); }
+        .dark-mode .background-blob { background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0) 70%); }
         @keyframes spin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
 
+        /* Bento Quick Stats Strip */
+        .hero-bento-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 32px;
+            padding: 12px 14px;
+            background: var(--card-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+        }
+        .bento-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+        }
+        .bento-item:hover {
+            background: rgba(99, 102, 241, 0.08);
+            transform: translateY(-2px);
+        }
+        .bento-icon {
+            font-size: 1.25rem;
+            color: var(--primary-color-start);
+            flex-shrink: 0;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .bento-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.25;
+            text-align: left;
+        }
+        .bento-text strong {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+        .bento-text small {
+            font-size: 0.74rem;
+            color: var(--light-text-color);
+        }
+
         .card {
-            background-color: var(--card-bg-color); border-radius: var(--border-radius);
+            background-color: var(--card-bg-color);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: var(--border-radius);
             border: 1px solid var(--border-color); padding: 30px; position: relative;
-            overflow: hidden; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+            overflow: hidden; transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 4px 16px var(--shadow-color);
         }
         .card::before {
             content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0;
             background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), var(--primary-color-start) 0%, transparent 40%);
             opacity: 0; transition: opacity 0.4s ease, border-color 0.3s ease; pointer-events: none; filter: blur(30px);
         }
-        .card:hover::before { opacity: 0.1; }
-        .card:hover { transform: translateY(0px); border-color: var(--primary-color-start); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .card:hover::before { opacity: 0.15; }
+        .card:hover { transform: translateY(-4px); border-color: var(--primary-color-start); box-shadow: 0 12px 28px var(--shadow-color); }
 
         .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 20px; max-width: 900px; margin: auto; }
-        .skill-card { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; text-align: center; gap: 10px; }
-        .skill-card i { font-size: 3rem; background: -webkit-linear-gradient(var(--primary-color-start), var(--primary-color-end)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .skill-card { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; text-align: center; gap: 10px; cursor: default; }
+        .skill-card i { font-size: 3rem; background: -webkit-linear-gradient(var(--primary-color-start), var(--primary-color-end)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; transition: transform 0.3s ease; }
+        .skill-card:hover i { transform: scale(1.15); }
         .skill-card p { font-weight: 500; }
 
         .timeline { position: relative; max-width: 800px; margin: 0 auto; }
@@ -398,6 +492,66 @@
         .project-content p { margin-bottom: 20px; font-size: 1rem; line-height: 1.6; }
         .project-links a { margin-right: 20px; color: var(--primary-color-start); text-decoration: none; font-weight: 600; font-size: 1.1rem; }
         .project-links a:hover { text-decoration: underline; }
+
+        /* Tech badge micro-interactions */
+        .project-content span {
+            transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+        }
+        .project-content span:hover {
+            transform: translateY(-2px);
+            background: rgba(99, 102, 241, 0.2) !important;
+            border-color: var(--primary-color-start);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+        }
+
+        /* Project Carousel Pagination & Indicators */
+        .project-pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 25px;
+            position: relative;
+            z-index: 20;
+        }
+        .project-counter {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--primary-color-start);
+            letter-spacing: 1px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            backdrop-filter: blur(8px);
+        }
+        .project-dots {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .project-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border-color);
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .project-dot.active {
+            width: 24px;
+            border-radius: 4px;
+            background: var(--primary-color-start);
+            box-shadow: 0 0 10px var(--primary-color-start);
+        }
+        .project-dot:hover:not(.active) {
+            background: var(--light-text-color);
+            transform: scale(1.2);
+        }
 
         /* Arrows */
         .scroll-btn {
@@ -533,6 +687,7 @@
             .hero-container { flex-direction: column-reverse; text-align: center; }
             .hero-text { text-align: center; }
             .hero-buttons, .contact-details { justify-content: center; align-items: center; }
+            .hero-bento-bar { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 25px; }
         }
 
         @media (max-width: 768px) {
@@ -572,6 +727,7 @@
             .profile-photo { width: 180px; height: 180px; }
             .hero-buttons { flex-direction: column; width: 100%; }
             .hero-buttons .btn { width: 100%; justify-content: center; }
+            .hero-bento-bar { grid-template-columns: 1fr; }
             .contact-details { font-size: 0.9rem; }
             main > section { padding-top: 70px; padding-bottom: 70px; }
             .skills-grid { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 12px; }
@@ -854,6 +1010,37 @@
                         <a href="https://www.linkedin.com/in/sameer-sayyad-673820291/" target="_blank" rel="noopener noreferrer" class="btn"><i class="fab fa-linkedin"></i> View LinkedIn</a>
                         <a href="https://github.com/Sayyaddsameer" target="_blank" rel="noopener noreferrer" class="btn btn-secondary"><i class="fab fa-github"></i> View GitHub</a>
                     </div>
+                    <!-- Quick Stats Bento Bar -->
+                    <div class="hero-bento-bar">
+                        <div class="bento-item">
+                            <span class="bento-icon"><i class="fas fa-layer-group"></i></span>
+                            <div class="bento-text">
+                                <strong>18 Projects</strong>
+                                <small>Production &amp; IaC</small>
+                            </div>
+                        </div>
+                        <div class="bento-item">
+                            <span class="bento-icon"><i class="fab fa-aws"></i></span>
+                            <div class="bento-text">
+                                <strong>AWS &amp; RHCSA</strong>
+                                <small>Certified Engineer</small>
+                            </div>
+                        </div>
+                        <div class="bento-item">
+                            <span class="bento-icon"><i class="fas fa-code"></i></span>
+                            <div class="bento-text">
+                                <strong>400+ Solved</strong>
+                                <small>DSA &amp; Problem Solving</small>
+                            </div>
+                        </div>
+                        <div class="bento-item">
+                            <span class="bento-icon"><i class="fas fa-trophy"></i></span>
+                            <div class="bento-text">
+                                <strong>Best AI Award</strong>
+                                <small>Project Space Season 8</small>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="hero-image hidden-animation">
                     <img src="sameer.webp" alt="Sayyad Sameer — Cloud and Backend Developer" class="profile-photo">
@@ -866,10 +1053,10 @@
             <div class="container">
                 <h2 class="slide-in-left">About Me</h2>
                 <p class="section-subtitle slide-in-right" style="max-width: 820px; margin-left: auto; margin-right: auto; line-height: 1.8; color: var(--text-color);">
-                    I'm a final-year Computer Science student at <strong>Aditya University</strong>, an <strong>AWS Certified Developer &ndash; Associate</strong> and <strong>RHCSA</strong>-certified engineer who builds cloud-native backend systems. What genuinely pulls me in is <strong>serverless, event-driven architecture</strong> on AWS &mdash; taking a vague problem statement and turning it into a system that scales cleanly, fails gracefully, and costs almost nothing while it sits idle.
+                    I'm a final-year Computer Science student (Class of 2027) at <strong>Aditya College of Engineering &amp; Technology</strong>, an <strong>AWS Certified Developer &ndash; Associate</strong> and <strong>RHCSA</strong>-certified engineer who builds cloud-native backend systems. What genuinely pulls me in is <strong>serverless, event-driven architecture</strong> on AWS &mdash; taking a vague problem statement and turning it into a system that scales cleanly, fails gracefully, and costs almost nothing while it sits idle.
                 </p>
                 <p class="section-subtitle slide-in-left" style="max-width: 820px; margin-left: auto; margin-right: auto; line-height: 1.8; color: var(--text-color); margin-top: 20px;">
-                    Most of my building happens in <strong>Python</strong> and <strong>FastAPI</strong>, containerized with <strong>Docker</strong> and wired together with services like Lambda, Step Functions, API Gateway, DynamoDB and SES. I care about the parts that never show up in a demo &mdash; idempotency, eager-loaded queries, zero-trust IAM, cold-start times &mdash; because that's the gap between a project that looks finished and one that actually holds up under load. I sharpen the fundamentals behind all of it through <strong>200+ solved DSA problems</strong>, and I'm looking for a role where I can keep shipping real cloud infrastructure.
+                    Most of my building happens in <strong>Python</strong> and <strong>FastAPI</strong>, containerized with <strong>Docker</strong> and wired together with services like Lambda, Step Functions, API Gateway, DynamoDB and SES. I care about the parts that never show up in a demo &mdash; idempotency, eager-loaded queries, zero-trust IAM, cold-start times &mdash; because that's the gap between a project that looks finished and one that actually holds up under load. I sharpen the fundamentals behind all of it through <strong>400+ solved DSA problems</strong> across LeetCode and GeeksforGeeks, and I'm looking for a role where I can keep shipping real cloud infrastructure.
                 </p>
             </div>
         </section>
@@ -880,60 +1067,63 @@
                 <h2 class="hidden-animation">Technical Proficiencies</h2>
                 <p class="section-subtitle hidden-animation">A breakdown of my technical stack and computer science fundamentals.</p>
 
-                <h3 class="hidden-animation skill-group-title">Languages</h3>
+                <h3 class="hidden-animation skill-group-title">Languages &amp; Core CS</h3>
                 <div class="skills-grid">
                     <div class="skill-card card hidden-animation" style="--i:1"><i class="fab fa-python"></i><p>Python</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:2"><i class="fab fa-java"></i><p>Java</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:3"><i class="fas fa-c"></i><p>C / C++</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:2"><i class="fas fa-c"></i><p>C / C++</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:3"><i class="fab fa-java"></i><p>Java</p></div>
                     <div class="skill-card card hidden-animation" style="--i:4"><i class="fas fa-database"></i><p>SQL</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:5"><i class="fab fa-html5"></i><p>HTML & CSS</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:5"><i class="fas fa-terminal"></i><p>Bash Shell</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:6"><i class="fab fa-html5"></i><p>HTML &amp; CSS</p></div>
                 </div>
 
-                <h3 class="hidden-animation skill-group-title" style="margin-top: 40px;">AWS Cloud Services</h3>
+                <h3 class="hidden-animation skill-group-title" style="margin-top: 40px;">Backend &amp; Databases</h3>
                 <div class="skills-grid">
-                    <div class="skill-card card hidden-animation" style="--i:1"><i class="fas fa-bolt"></i><p>Lambda</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:1"><i class="fas fa-bolt"></i><p>FastAPI</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:2"><i class="fas fa-database"></i><p>PostgreSQL</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:3"><i class="fas fa-layer-group"></i><p>SQLAlchemy 2.0</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:4"><i class="fas fa-rotate"></i><p>asyncpg</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:5"><i class="fas fa-table-cells"></i><p>DynamoDB</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:6"><i class="fas fa-plug"></i><p>RESTful APIs</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:7"><i class="fas fa-vial-circle-check"></i><p>Pytest</p></div>
+                </div>
+
+                <h3 class="hidden-animation skill-group-title" style="margin-top: 40px;">Cloud &amp; Serverless (AWS)</h3>
+                <div class="skills-grid">
+                    <div class="skill-card card hidden-animation" style="--i:1"><i class="fas fa-bolt-lightning"></i><p>AWS Lambda</p></div>
                     <div class="skill-card card hidden-animation" style="--i:2"><i class="fas fa-diagram-project"></i><p>Step Functions</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:3"><i class="fas fa-network-wired"></i><p>API Gateway</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:4"><i class="fas fa-table"></i><p>DynamoDB</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:5"><i class="fas fa-hard-drive"></i><p>S3</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:6"><i class="fas fa-user-shield"></i><p>Cognito</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:7"><i class="fas fa-brain"></i><p>Bedrock</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:8"><i class="fas fa-comment-dots"></i><p>Comprehend</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:9"><i class="fas fa-envelope-open-text"></i><p>SQS / SNS</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:10"><i class="fas fa-server"></i><p>EC2</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:3"><i class="fas fa-envelope-open-text"></i><p>SQS &amp; SNS</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:4"><i class="fas fa-network-wired"></i><p>API Gateway</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:5"><i class="fas fa-hard-drive"></i><p>Amazon S3</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:6"><i class="fas fa-server"></i><p>Amazon RDS</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:7"><i class="fas fa-stream"></i><p>Amazon MSK (Kafka)</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:8"><i class="fas fa-globe"></i><p>CloudFront Edge</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:9"><i class="fas fa-shield-halved"></i><p>IAM &amp; KMS</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:10"><i class="fas fa-brain"></i><p>Bedrock &amp; Textract</p></div>
                 </div>
 
-                <h3 class="hidden-animation skill-group-title" style="margin-top: 40px;">Architecture & Practices</h3>
-                <div class="skills-grid">
-                    <div class="skill-card card hidden-animation" style="--i:1"><i class="fas fa-cloud"></i><p>Serverless</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:2"><i class="fas fa-cubes"></i><p>Microservices</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:3"><i class="fas fa-bolt-lightning"></i><p>Event-Driven</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:4"><i class="fas fa-plug"></i><p>REST APIs</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:5"><i class="fas fa-lock"></i><p>JWT / RBAC</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:6"><i class="fas fa-arrows-rotate"></i><p>CI/CD</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:7"><i class="fas fa-code-branch"></i><p>IaC</p></div>
-                </div>
-
-                <h3 class="hidden-animation skill-group-title" style="margin-top: 40px;">DevOps & Tooling</h3>
+                <h3 class="hidden-animation skill-group-title" style="margin-top: 40px;">DevOps, IaC &amp; Tooling</h3>
                 <div class="skills-grid">
                     <div class="skill-card card hidden-animation" style="--i:1"><i class="fab fa-docker"></i><p>Docker</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:2"><i class="fas fa-code-branch"></i><p>Terraform</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:3"><i class="fab fa-git-alt"></i><p>Git & GitHub</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:4"><i class="fab fa-linux"></i><p>Linux (RHCSA)</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:5"><i class="fab fa-google"></i><p>GCP</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:6"><i class="fas fa-paper-plane"></i><p>Postman</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:7"><i class="fas fa-cubes"></i><p>Kubernetes</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:8"><i class="fab fa-jenkins"></i><p>Jenkins</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:9"><i class="fas fa-terminal"></i><p>Ansible</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:2"><i class="fas fa-dharmachakra"></i><p>Kubernetes (k3s)</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:3"><i class="fas fa-code-branch"></i><p>Terraform (IaC)</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:4"><i class="fab fa-github-alt"></i><p>GitHub Actions (CI/CD)</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:5"><i class="fab fa-linux"></i><p>Linux (RHCSA)</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:6"><i class="fas fa-box-open"></i><p>AWS SAM &amp; LocalStack</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:7"><i class="fab fa-git-alt"></i><p>Git &amp; GitHub</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:8"><i class="fas fa-paper-plane"></i><p>Postman</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:9"><i class="fas fa-gauge-high"></i><p>k6 &amp; Locust</p></div>
                 </div>
 
-                <h3 class="hidden-animation skill-group-title" style="margin-top: 40px;">CS Fundamentals & Concepts</h3>
+                <h3 class="hidden-animation skill-group-title" style="margin-top: 40px;">System Architecture &amp; Design</h3>
                 <div class="skills-grid">
-                    <div class="skill-card card hidden-animation" style="--i:1"><i class="fas fa-microchip"></i><p>Operating Systems</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:2"><i class="fas fa-database"></i><p>DBMS & SQL</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:3"><i class="fas fa-project-diagram"></i><p>SDLC</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:4"><i class="fas fa-laptop-code"></i><p>DSA & Algorithms</p></div>
-                    <div class="skill-card card hidden-animation" style="--i:5"><i class="fas fa-sitemap"></i><p>Networking</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:1"><i class="fas fa-bolt"></i><p>Event-Driven Architecture</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:2"><i class="fas fa-cubes"></i><p>Microservices</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:3"><i class="fas fa-arrows-split-up-and-left"></i><p>Optimistic Concurrency</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:4"><i class="fas fa-fingerprint"></i><p>Database Idempotency</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:5"><i class="fas fa-lock"></i><p>Zero-Trust Security</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:6"><i class="fas fa-database"></i><p>ETag / 304 Caching</p></div>
+                    <div class="skill-card card hidden-animation" style="--i:7"><i class="fas fa-arrows-spin"></i><p>SDLC &amp; Testing</p></div>
                 </div>
             </div>
         </section>
@@ -947,7 +1137,27 @@
         <div class="timeline">
             <div class="timeline-item left hidden-animation">
                 <div class="timeline-content card">
-                    <h3>AWS Development &amp; DevOps Trainee</h3>
+                    <h3>AWS &amp; Cloud Trainee — Drive Ready Program</h3>
+                    <p class="date">Technical Hub Pvt Ltd | July 2025 – May 2026</p>
+                    <p>
+                        Selected for Technical Hub's flagship <strong>Drive Ready Program</strong>, an 11-month
+                        intensive focused on production-grade cloud engineering.
+                        Built and deployed <strong>cloud-native applications</strong> using AWS services including
+                        <strong>Lambda, API Gateway, DynamoDB, S3</strong> and <strong>EC2</strong>.
+                        Designed <strong>serverless, event-driven architectures</strong> for scalable applications
+                        and developed multiple projects involving <strong>microservices, REST APIs</strong> and
+                        <strong>containerised services</strong> with <strong>Docker</strong>.
+                        Worked daily with <strong>Git</strong> and <strong>Linux-based environments</strong>,
+                        strengthened backend skills using <strong>Python</strong> and modern API frameworks,
+                        and earned the <strong>AWS Certified Developer – Associate</strong> certification
+                        through rigorous hands-on practice and cloud projects.
+                    </p>
+                </div>
+            </div>
+
+            <div class="timeline-item right hidden-animation">
+                <div class="timeline-content card">
+                    <h3>Cloud &amp; DevOps Intern (AWS)</h3>
                     <p class="date">Technical Hub Pvt Ltd | May 2025 – June 2025</p>
                     <p>
                         An intensive traineeship where I moved from cloud theory to shipping real infrastructure.
@@ -975,7 +1185,7 @@
                         <i class="fas fa-trophy" style="font-size: 2.6rem; background: -webkit-linear-gradient(var(--primary-color-start), var(--primary-color-end)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
                         <div>
                             <h3 style="font-size: 1.5rem; margin-bottom: 4px;">Best AI Integration &mdash; CloudSentinel AI</h3>
-                            <p style="color: var(--primary-color-start); font-weight: 600; font-size: 0.95rem;">Project Space Season 8 &middot; Technical Hub, Aditya University &middot; May 2026</p>
+                            <p style="color: var(--primary-color-start); font-weight: 600; font-size: 0.95rem;">Project Space Season 8 &middot; Technical Hub, Aditya College of Engineering &amp; Technology &middot; May 2026</p>
                         </div>
                     </div>
 
@@ -997,7 +1207,7 @@
                     <!-- Achievement Photo Gallery -->
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; border-radius: 10px; overflow: hidden;">
                         <img src="award.webp" alt="Team CloudSentinel AI receiving the AI Excellence Cap award at Project Space Season 8" loading="lazy" decoding="async" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; cursor: pointer; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
-                        <img src="Thub.webp" alt="Team CloudSentinel AI at Technical Hub, Aditya University" loading="lazy" decoding="async" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; cursor: pointer; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                        <img src="Thub.webp" alt="Team CloudSentinel AI at Technical Hub, Aditya College of Engineering &amp; Technology" loading="lazy" decoding="async" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; cursor: pointer; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
                         <img src="presentation_chart.webp" alt="CloudSentinel AI architecture chart presentation during hackathon evaluation" loading="lazy" decoding="async" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; cursor: pointer; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
                         <img src="presentation.webp" alt="Team CloudSentinel AI presenting architecture to judges at Project Space Season 8" loading="lazy" decoding="async" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; cursor: pointer; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
                     </div>
@@ -1020,7 +1230,7 @@
         <div class="timeline">
             <div class="timeline-item left hidden-animation">
                 <div class="timeline-content card">
-                    <h3>Aditya University, Surampalem</h3>
+                    <h3>Aditya College of Engineering & Technology, Surampalem</h3>
                     <p class="date">
                         B.Tech in Computer Science (Expected 2027) | 2023 – 2027 | CGPA: 8.69
                     </p>
@@ -1062,197 +1272,292 @@
             <div class="projects-horizontal-track" id="projectTrack">
 
                 <div class="project-card card hidden-animation" style="--i:0">
-    <img src="CloudSentinel.webp" alt="CloudSentinel AI — Multi-Cloud Security & GenAI Platform" loading="lazy" decoding="async">
-    <div class="project-content">
-        <h3>CloudSentinel AI — Multi-Cloud Security & GenAI Platform</h3>
-
-        <div style="font-size: 0.85rem; color: var(--light-text-color); margin-bottom: 15px; line-height: 1.5;">
-            <p style="margin-bottom: 15px;"><strong>PROBLEM:</strong> Cloud-security tools bury teams in context-free alerts and scan domains one after another, so genuine threats surface slowly and remediation lags behind.</p>
-            <p style="margin-bottom: 15px;"><strong>SOLUTION:</strong> A serverless, multi-cloud platform that runs five security-domain scanners in parallel and hands every finding to an LLM for grounded, plain-language remediation.</p>
-            <p style="border-left: 3px solid var(--primary-color-start); padding-left: 10px; margin-top: 10px;">
-                <strong>KEY IMPLEMENTATION:</strong> Orchestrated five scanners concurrently with <strong>AWS Step Functions</strong> (<strong>3.47× faster</strong> than sequential), with a Groq-hosted <strong>Llama 3.3</strong> model writing grounded remediation under a strict <strong>zero-trust IAM</strong> model. A live AWS scan reached <strong>96.6% precision</strong> (84/87 findings, zero AI hallucinations), spanning AWS + GCP with fully Terraform-defined infrastructure.
-            </p>
-        </div>
-
-        <div style="margin-top: auto; margin-bottom: 35px;">
-            <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--light-text-color); margin-bottom: 5px;">Tech Stack:</p>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Step Functions</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Lambda</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Bedrock</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Groq · Llama 3.3</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">DynamoDB</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Cognito</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Comprehend</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">GCP</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-bottom: 5px; display: inline-block;">Terraform</span>
-        </div>
-
-        <div class="project-links">
-            <a href="https://github.com/Sayyaddsameer/CloudSentinel_AI" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> Source & Architecture</a>
-        </div>
-    </div>
-</div>
-
-                <div class="project-card card hidden-animation" style="--i:1">
-    <img src="AWS-Blog-API.webp" alt="AWS Cloud-Native Blog API" loading="lazy" decoding="async">
-    
-    <div class="project-content">
-        <h3>AWS Cloud-Native Blog API</h3>
-        
-        <div style="font-size: 0.85rem; color: var(--light-text-color); margin-bottom: 15px; line-height: 1.5;">
-            <p style="margin-bottom: 15px;"><strong>PROBLEM:</strong> Standard ORM queries suffer from the "N+1 Problem," causing high latency in serverless environments.</p>
-            <p style="margin-bottom: 15px;"><strong>SOLUTION:</strong> A containerized REST API using Docker on AWS Lambda with a strictly typed relational schema.</p>
-            <p style="border-left: 3px solid var(--primary-color-start); padding-left: 10px; margin-top: 10px;">
-                <strong>KEY IMPLEMENTATION:</strong> Engineered an <strong>Eager Loading</strong> strategy in SQLAlchemy to fetch related data in a single query, reducing DB round-trips by 80%. Optimized Docker image size for faster Lambda cold starts.
-            </p>
-        </div>
-
-        <div style="margin-top: auto; margin-bottom: 35px;">
-            <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--light-text-color); margin-bottom: 5px;">Tech Stack:</p>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px;">FastAPI</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px;">Docker</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px;">AWS Lambda</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">RDS (MySQL)</span>
-        </div>
-
-        <div class="project-links">
-            <a href="https://github.com/Sayyaddsameer/aws_blog_project" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> Source & Architecture</a>
-        </div>
-    </div>
-</div>
-
-                <div class="project-card card hidden-animation" style="--i:2">
-    <img src="Serverless-ATS.webp" alt="Serverless ATS Project" loading="lazy" decoding="async">
-    <div class="project-content">
-        <h3>Serverless Job Application Tracking System (ATS)</h3>
-
-        <div style="font-size: 0.85rem; color: var(--light-text-color); margin-bottom: 15px; line-height: 1.5;">
-            <p style="margin-bottom: 15px;"><strong>PROBLEM:</strong> Traditional synchronous recruiting systems bottleneck and fail during high-volume hiring events.</p>
-            <p style="margin-bottom: 15px;"><strong>SOLUTION:</strong> An event-driven, asynchronous architecture using AWS Step Functions to orchestrate workflows.</p>
-            <p style="border-left: 3px solid var(--primary-color-start); padding-left: 10px; margin-top: 10px;">
-                <strong>KEY IMPLEMENTATION:</strong> Designed a State Machine to handle candidate status transitions. Decoupled email notifications using <strong>SQS & SES</strong> to ensure the API never hangs, even under load. Implemented strict RBAC with Cognito.
-            </p>
-        </div>
-
-        <div style="margin-top: auto; margin-bottom: 35px;">
-            <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--light-text-color); margin-bottom: 5px;">Tech Stack:</p>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Lambda</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">API Gateway</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Step Functions</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">SQS & SES</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Cognito</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">PostgreSQL</span>
-        </div>
-
-        <div class="project-links">
-            <a href="https://github.com/Sayyaddsameer/Serverless-Job-Application-Tracking-System" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> Source Code</a>
-        </div>
-    </div>
-</div>
-            <div class="project-card card hidden-animation" style="--i:3">
-    <img src="kafka-eda-aws.webp" alt="Kafka Event-Driven Architecture" loading="lazy" decoding="async">
-    <div class="project-content">
-        <h3>Idempotent Event-Driven Architecture</h3>
-        
-        <div style="font-size: 0.85rem; color: var(--light-text-color); margin-bottom: 15px; line-height: 1.5;">
-            <p style="margin-bottom: 15px;"><strong>PROBLEM:</strong> High-throughput distributed systems often suffer from duplicate processing and data inconsistency during traffic spikes.</p>
-            <p style="margin-bottom: 15px;"><strong>SOLUTION:</strong> A fault-tolerant, hybrid cloud architecture ensuring data integrity through strict idempotency patterns.</p>
-            <p style="border-left: 3px solid var(--primary-color-start); padding-left: 10px; margin-top: 10px;">
-                <strong>KEY IMPLEMENTATION:</strong> Containerized Producer/Consumer services stored in <strong>AWS ECR</strong> and deployed serverlessly on <strong>AWS ECS Fargate</strong>. The system connects to <strong>Amazon MSK</strong> for reliable streaming, with infrastructure fully defined via <strong>Terraform</strong>.
-            </p>
-        </div>
-
-        <div style="margin-top: auto; margin-bottom: 35px;">
-            <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--light-text-color); margin-bottom: 5px;">Tech Stack:</p>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px;">AWS MSK</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px;">ECS Fargate</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px;">ECR</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">Terraform</span>
-        </div>
-
-        <div class="project-links">
-            <a href="https://github.com/Sayyaddsameer/kafka-eda-aws" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> View Architecture</a>
-        </div>
-    </div>
-</div>
-                <div class="project-card card hidden-animation" style="--i:4">
-    <img src="HireFusion-AI.webp" alt="HireFusion Project" loading="lazy" decoding="async">
-    <div class="project-content">
-        <h3>HireFusion AI – Recruitment Platform (AWS)</h3>
-        
-        <div style="font-size: 0.85rem; color: var(--light-text-color); margin-bottom: 15px; line-height: 1.5;">
-            <p style="margin-bottom: 15px;">
-                <strong>PROBLEM:</strong> Manual resume screening is slow, biased, and prone to human error.
-            </p>
-
-            <p style="margin-bottom: 15px;">
-                <strong>SOLUTION:</strong> A multi-modal AI recruitment platform built on 
-                <strong>Amazon Web Services (AWS)</strong> that evaluates both resumes and interview videos.
-            </p>
-
-            <p style="border-left: 3px solid var(--primary-color-start); padding-left: 10px; margin-top: 10px;">
-                <strong>KEY IMPLEMENTATION:</strong> Designed an event-driven, serverless pipeline on AWS.
-                Resume and video uploads to <strong>Amazon S3</strong> trigger 
-                <strong>AWS Lambda</strong> functions, integrating 
-                <strong>Amazon Textract</strong> (OCR),
-                <strong>Amazon Comprehend</strong> (skill & sentiment analysis),
-                <strong>Amazon Transcribe</strong> (interview speech-to-text),
-                and <strong>Amazon Rekognition</strong> (facial analysis).
-                Aggregated confidence scores are stored in
-                <strong>Amazon DynamoDB</strong> and exposed through <strong>API Gateway</strong> for instant candidate ranking.
-            </p>
-        </div>
-
-        <div style="margin-top: auto; margin-bottom: 35px;">
-            <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--light-text-color); margin-bottom: 5px;">
-                Tech Stack (AWS):
-            </p>
-
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px;">AWS Lambda</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px;">Amazon S3</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px;">Textract</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px;">Comprehend</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px;">Transcribe</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px;">Rekognition</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px;">API Gateway</span>
-            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">DynamoDB</span>
-        </div>
-
-        <div class="project-links">
-            <a href="https://github.com/Sayyaddsameer/HireFusionAI" target="_blank" rel="noopener noreferrer">
-                <i class="fab fa-github"></i> View Architecture
-            </a>
-        </div>
-    </div>
-</div>
-                <div class="project-card card hidden-animation" style="--i:5">
-                    <img src="OnDemand-Portfolio.webp" alt="On-Demand Portfolio Project" loading="lazy" decoding="async">
+                    <img src="CloudSentinel.webp" alt="CloudSentinel AI — Multi-Cloud Security & GenAI Platform" loading="lazy" decoding="async">
                     <div class="project-content">
-                        <h3>On-Demand Serverless Portfolio</h3>
-                        
+                        <h3>CloudSentinel AI — Multi-Cloud Security & GenAI Platform</h3>
+
                         <div style="font-size: 0.85rem; color: var(--light-text-color); margin-bottom: 15px; line-height: 1.5;">
-                            <p style="margin-bottom: 15px;"><strong>PROBLEM:</strong> Hosting static sites 24/7 incurs unnecessary cloud costs when traffic is intermittent.</p>
-                            <p style="margin-bottom: 15px;"><strong>SOLUTION:</strong> A "Scale-to-Zero" architecture that provisions infrastructure only when a visitor arrives.</p>
+                            <p style="margin-bottom: 15px;"><strong>PROBLEM:</strong> Cloud-security tools bury engineering teams in context-free alerts and scan domains sequentially, delaying detection and remediation.</p>
+                            <p style="margin-bottom: 15px;"><strong>SOLUTION:</strong> A serverless multi-cloud platform orchestrating 5 parallel domain scanners with an LLM remediation layer protected by strict anti-hallucination guardrails.</p>
                             <p style="border-left: 3px solid var(--primary-color-start); padding-left: 10px; margin-top: 10px;">
-                                <strong>KEY IMPLEMENTATION:</strong> Utilized <strong>AWS Lambda</strong> to spin up the site on-demand. Integrated <strong>EventBridge Scheduler</strong> to trigger a self-destruct sequence after 30 minutes of inactivity, ensuring exactly zero idle costs.
+                                <strong>KEY IMPLEMENTATION:</strong> Orchestrated 5 scanners in parallel via <strong>AWS Step Functions</strong> (<strong>3.5× faster</strong> than sequential) with per-branch failure isolation. Integrated Groq-hosted <strong>Llama 3.3 70B</strong> with regex-based <strong>anti-hallucination guardrails</strong> that reject fabricated IPs/ARNs. Cross-account scanning via STS AssumeRole with ExternalId, deployed via 16 Terraform resource files. Won <strong>Best AI Integration Award</strong> (160 teams, 900+ participants).
                             </p>
                         </div>
 
                         <div style="margin-top: auto; margin-bottom: 35px;">
                             <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--light-text-color); margin-bottom: 5px;">Tech Stack:</p>
-                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px;">EventBridge</span>
-                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px;">Lambda</span>
-                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px;">FinOps Pattern</span>
-                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">SES</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Step Functions</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Lambda</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Llama 3.3 / Groq</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">DynamoDB</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">STS AssumeRole</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-bottom: 5px; display: inline-block;">Terraform</span>
                         </div>
 
                         <div class="project-links">
-                            <a href="https://github.com/Sayyaddsameer/OnDemand-Portifolio" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> View Architecture</a>
+                            <a href="https://github.com/Sayyaddsameer/CloudSentinel_AI" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> Source & Architecture</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card card hidden-animation" style="--i:1">
+                    <img src="Serverless-ATS.webp" alt="Event-Driven Order Processing System" loading="lazy" decoding="async">
+                    <div class="project-content">
+                        <h3>Event-Driven Order Processing System</h3>
+
+                        <div style="font-size: 0.85rem; color: var(--light-text-color); margin-bottom: 15px; line-height: 1.5;">
+                            <p style="margin-bottom: 15px;"><strong>PROBLEM:</strong> Synchronous order pipelines fail under sudden traffic surges, lose messages, and cause double-processing during retries.</p>
+                            <p style="margin-bottom: 15px;"><strong>SOLUTION:</strong> An asynchronous, decoupled event-driven pipeline (API Gateway → Lambda → SQS → Lambda → SNS) guaranteeing at-least-once delivery.</p>
+                            <p style="border-left: 3px solid var(--primary-color-start); padding-left: 10px; margin-top: 10px;">
+                                <strong>KEY IMPLEMENTATION:</strong> Achieved <strong>zero duplicate orders</strong> via database-backed idempotency (<code>ON CONFLICT DO NOTHING</code>). Prevented message loss via <strong>SQS partial batch failure reporting</strong> (<code>batchItemFailures</code>) and Dead Letter Queue (DLQ) routing. Graceful degradation returning <strong>HTTP 202</strong> on queue outages. Validated on LocalStack.
+                            </p>
+                        </div>
+
+                        <div style="margin-top: auto; margin-bottom: 35px;">
+                            <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--light-text-color); margin-bottom: 5px;">Tech Stack:</p>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">AWS Lambda</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">SQS & SNS</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">PostgreSQL</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">AWS SAM</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-bottom: 5px; display: inline-block;">LocalStack</span>
+                        </div>
+
+                        <div class="project-links">
+                            <a href="https://github.com/Sayyaddsameer/order_processing_system_with_aws" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> Source & Architecture</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card card hidden-animation" style="--i:2">
+                    <img src="AWS-Blog-API.webp" alt="Concurrency-Safe E-Commerce Order API" loading="lazy" decoding="async">
+                    <div class="project-content">
+                        <h3>Concurrency-Safe E-Commerce Order API</h3>
+                        
+                        <div style="font-size: 0.85rem; color: var(--light-text-color); margin-bottom: 15px; line-height: 1.5;">
+                            <p style="margin-bottom: 15px;"><strong>PROBLEM:</strong> Concurrent checkouts cause race conditions, dirty reads, and inventory overselling when users purchase the last item simultaneously.</p>
+                            <p style="margin-bottom: 15px;"><strong>SOLUTION:</strong> High-throughput REST API with database-level concurrency controls and automated retry mechanisms for conflict resolution.</p>
+                            <p style="border-left: 3px solid var(--primary-color-start); padding-left: 10px; margin-top: 10px;">
+                                <strong>KEY IMPLEMENTATION:</strong> Implemented <strong>optimistic concurrency control</strong> using database version columns (<code>products.version</code>) to eliminate race conditions without table locks. Added automatic retry loops on conflict, domain exception hierarchy, structured JSON transaction logging, and verified under concurrent load with <strong>9 Pytest integration tests</strong>.
+                            </p>
+                        </div>
+
+                        <div style="margin-top: auto; margin-bottom: 35px;">
+                            <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--light-text-color); margin-bottom: 5px;">Tech Stack:</p>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">FastAPI</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">SQLAlchemy 2.0</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">PostgreSQL 16</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Alembic</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-bottom: 5px; display: inline-block;">Pytest</span>
+                        </div>
+
+                        <div class="project-links">
+                            <a href="https://github.com/Sayyaddsameer/ecommerce-order-api" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> Source & Architecture</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card card hidden-animation" style="--i:3">
+                    <img src="data-export-engine.svg" alt="High-Throughput O(1) Memory Data Export Engine" loading="lazy" decoding="async">
+                    <div class="project-content">
+                        <h3>High-Throughput O(1) Memory Data Export Engine</h3>
+
+                        <div style="font-size: 0.85rem; color: var(--light-text-color); margin-bottom: 15px; line-height: 1.5;">
+                            <p style="margin-bottom: 15px;"><strong>PROBLEM:</strong> Exporting millions of rows of data into memory crashes application servers with fatal Out-Of-Memory (OOM) errors.</p>
+                            <p style="margin-bottom: 15px;"><strong>SOLUTION:</strong> A resilient streaming data pipeline maintaining strict O(1) memory complexity regardless of dataset volume.</p>
+                            <p style="border-left: 3px solid var(--primary-color-start); padding-left: 10px; margin-top: 10px;">
+                                <strong>KEY IMPLEMENTATION:</strong> Achieved <strong>O(1) memory complexity</strong> for infinite-scale data exports using <code>asyncpg</code> server-side cursors and chunked Python generator streaming directly to the client. Applied on-the-fly <strong>gzip</strong> compression and strictly capped the Docker container memory at <strong>256MB</strong> to empirically prove zero memory bloat.
+                            </p>
+                        </div>
+
+                        <div style="margin-top: auto; margin-bottom: 35px;">
+                            <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--light-text-color); margin-bottom: 5px;">Tech Stack:</p>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Python</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">asyncpg</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">PostgreSQL</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Gzip Streaming</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-bottom: 5px; display: inline-block;">Docker (256MB Cap)</span>
+                        </div>
+
+                        <div class="project-links">
+                            <a href="https://github.com/Sayyaddsameer/data-export-engine" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> Source & Architecture</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card card hidden-animation" style="--i:4">
+                    <img src="content-delivery-api.svg" alt="Content Delivery & Origin Shield API" loading="lazy" decoding="async">
+                    <div class="project-content">
+                        <h3>Content Delivery &amp; Origin Shield API</h3>
+
+                        <div style="font-size: 0.85rem; color: var(--light-text-color); margin-bottom: 15px; line-height: 1.5;">
+                            <p style="margin-bottom: 15px;"><strong>PROBLEM:</strong> Serving dynamic and static content without caching wastes bandwidth and overwhelms origin backend servers.</p>
+                            <p style="margin-bottom: 15px;"><strong>SOLUTION:</strong> High-performance content delivery combining HTTP caching semantics with CloudFront Origin Shield authentication.</p>
+                            <p style="border-left: 3px solid var(--primary-color-start); padding-left: 10px; margin-top: 10px;">
+                                <strong>KEY IMPLEMENTATION:</strong> Built custom <strong>ETag / 304 Not Modified</strong> conditional caching layer saving origin bandwidth. Implemented CloudFront <strong>Origin Shield</strong> request authentication via secret headers (<code>X-CDN-Secret</code>). Engineered high-concurrency connection pooling via <code>asyncpg</code> and validated throughput with <strong>Locust</strong> load testing benchmarks.
+                            </p>
+                        </div>
+
+                        <div style="margin-top: auto; margin-bottom: 35px;">
+                            <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--light-text-color); margin-bottom: 5px;">Tech Stack:</p>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">FastAPI</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">CloudFront Edge</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">S3 / MinIO</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">asyncpg</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-bottom: 5px; display: inline-block;">Locust Testing</span>
+                        </div>
+
+                        <div class="project-links">
+                            <a href="https://github.com/Sayyaddsameer/aws-content-delivery-api" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> Source & Architecture</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card card hidden-animation" style="--i:5">
+                    <img src="fintech-infra.svg" alt="FinTech Compliance Infrastructure as Code" loading="lazy" decoding="async">
+                    <div class="project-content">
+                        <h3>FinTech Compliance Infrastructure as Code</h3>
+
+                        <div style="font-size: 0.85rem; color: var(--light-text-color); margin-bottom: 15px; line-height: 1.5;">
+                            <p style="margin-bottom: 15px;"><strong>PROBLEM:</strong> Cloud architectures with loose permissions or unrotated keys fail regulatory audits and expose financial data.</p>
+                            <p style="margin-bottom: 15px;"><strong>SOLUTION:</strong> 100% Infrastructure as Code enforcing bank-grade zero-trust policies and automated compliance audits.</p>
+                            <p style="border-left: 3px solid var(--primary-color-start); padding-left: 10px; margin-top: 10px;">
+                                <strong>KEY IMPLEMENTATION:</strong> Provisioned customer-managed <strong>AWS KMS</strong> keys with automated annual key rotation (<code>enable_key_rotation = true</code>). Enforced strict <strong>zero-wildcard least-privilege IAM</strong> policies and global S3 Public Access Block. Engineered a 248-line Bash compliance test suite with <strong>7/7 automated audit checks</strong>.
+                            </p>
+                        </div>
+
+                        <div style="margin-top: auto; margin-bottom: 35px;">
+                            <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--light-text-color); margin-bottom: 5px;">Tech Stack:</p>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Terraform IaC</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">AWS KMS</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">IAM Least-Privilege</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">S3 PAB</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-bottom: 5px; display: inline-block;">Bash Automation</span>
+                        </div>
+
+                        <div class="project-links">
+                            <a href="https://github.com/Sayyaddsameer/fintech-infra" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> View Architecture</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card card hidden-animation" style="--i:6">
+                    <img src="container-benchmark.svg" alt="Container Orchestration Scaling Benchmark" loading="lazy" decoding="async">
+                    <div class="project-content">
+                        <h3>Container Orchestration Scaling Benchmark</h3>
+
+                        <div style="font-size: 0.85rem; color: var(--light-text-color); margin-bottom: 15px; line-height: 1.5;">
+                            <p style="margin-bottom: 15px;"><strong>PROBLEM:</strong> Selecting between Kubernetes and Docker Swarm lacks empirical data on real-world autoscaling latency and resource overhead.</p>
+                            <p style="margin-bottom: 15px;"><strong>SOLUTION:</strong> A scientifically benchmarked DevOps environment evaluating container scaling under intense simulated load.</p>
+                            <p style="border-left: 3px solid var(--primary-color-start); padding-left: 10px; margin-top: 10px;">
+                                <strong>KEY IMPLEMENTATION:</strong> Authored Kubernetes (k3s) manifests with <strong>Horizontal Pod Autoscaling (HPA)</strong> and zero-downtime rolling updates. Pitted against Docker Swarm overlay routing meshes. Executed automated <strong>k6</strong> load tests measuring scaling latency, resource convergence, and CPU pressure under surge traffic.
+                            </p>
+                        </div>
+
+                        <div style="margin-top: auto; margin-bottom: 35px;">
+                            <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--light-text-color); margin-bottom: 5px;">Tech Stack:</p>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Kubernetes (k3s)</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Docker Swarm</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">k6 Benchmarks</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">HPA Autoscaling</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-bottom: 5px; display: inline-block;">Linux CLI</span>
+                        </div>
+
+                        <div class="project-links">
+                            <a href="https://github.com/Sayyaddsameer/container-orchestration-comparison" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> View Architecture</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card card hidden-animation" style="--i:7">
+                    <img src="kafka-eda-aws.webp" alt="Kafka Event-Driven Architecture" loading="lazy" decoding="async">
+                    <div class="project-content">
+                        <h3>Idempotent Event-Driven Architecture (Kafka)</h3>
+                        
+                        <div style="font-size: 0.85rem; color: var(--light-text-color); margin-bottom: 15px; line-height: 1.5;">
+                            <p style="margin-bottom: 15px;"><strong>PROBLEM:</strong> High-throughput distributed systems often suffer from duplicate processing and data inconsistency during traffic spikes.</p>
+                            <p style="margin-bottom: 15px;"><strong>SOLUTION:</strong> A fault-tolerant, hybrid cloud architecture ensuring data integrity through strict idempotency patterns.</p>
+                            <p style="border-left: 3px solid var(--primary-color-start); padding-left: 10px; margin-top: 10px;">
+                                <strong>KEY IMPLEMENTATION:</strong> Containerized Producer/Consumer services stored in <strong>AWS ECR</strong> and deployed serverlessly on <strong>AWS ECS Fargate</strong>. Connected to <strong>Amazon MSK</strong> for reliable streaming, using <code>aiokafka</code> for async consumption and PostgreSQL for deduplication. Fully provisioned via <strong>Terraform</strong>.
+                            </p>
+                        </div>
+
+                        <div style="margin-top: auto; margin-bottom: 35px;">
+                            <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--light-text-color); margin-bottom: 5px;">Tech Stack:</p>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Amazon MSK</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">ECS Fargate</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">aiokafka</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">PostgreSQL</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-bottom: 5px; display: inline-block;">Terraform</span>
+                        </div>
+
+                        <div class="project-links">
+                            <a href="https://github.com/Sayyaddsameer/kafka-eda-aws" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> View Architecture</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card card hidden-animation" style="--i:8">
+                    <img src="HireFusion-AI.webp" alt="HireFusion AI Platform" loading="lazy" decoding="async">
+                    <div class="project-content">
+                        <h3>HireFusion AI – Recruitment Intelligence Platform</h3>
+                        
+                        <div style="font-size: 0.85rem; color: var(--light-text-color); margin-bottom: 15px; line-height: 1.5;">
+                            <p style="margin-bottom: 15px;"><strong>PROBLEM:</strong> Manual resume screening is slow, biased, and struggles to accurately parse unstructured document data.</p>
+                            <p style="margin-bottom: 15px;"><strong>SOLUTION:</strong> A serverless multi-modal AI platform on AWS that evaluates resumes with OCR and natural language analysis.</p>
+                            <p style="border-left: 3px solid var(--primary-color-start); padding-left: 10px; margin-top: 10px;">
+                                <strong>KEY IMPLEMENTATION:</strong> Designed an event-driven S3 upload trigger executing <strong>AWS Lambda</strong> workers. Integrated <strong>Amazon Textract</strong> for OCR parsing and <strong>Amazon Comprehend</strong> for NLP sentiment and skill extraction, aggregating confidence scores into <strong>DynamoDB</strong> with API Gateway delivery.
+                            </p>
+                        </div>
+
+                        <div style="margin-top: auto; margin-bottom: 35px;">
+                            <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--light-text-color); margin-bottom: 5px;">Tech Stack:</p>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">AWS Lambda</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Textract (OCR)</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Comprehend</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Amazon S3</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-bottom: 5px; display: inline-block;">DynamoDB</span>
+                        </div>
+
+                        <div class="project-links">
+                            <a href="https://github.com/Sayyaddsameer/HireFusionAI" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> View Architecture</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card card hidden-animation" style="--i:9">
+                    <img src="OnDemand-Portfolio.webp" alt="On-Demand Portfolio Platform" loading="lazy" decoding="async">
+                    <div class="project-content">
+                        <h3>On-Demand Serverless Portfolio Platform</h3>
+                        
+                        <div style="font-size: 0.85rem; color: var(--light-text-color); margin-bottom: 15px; line-height: 1.5;">
+                            <p style="margin-bottom: 15px;"><strong>PROBLEM:</strong> Hosting cloud infrastructure 24/7 incurs continuous idle costs when web traffic is intermittent.</p>
+                            <p style="margin-bottom: 15px;"><strong>SOLUTION:</strong> An event-driven "Scale-to-Zero" lifecycle architecture that provisions cloud access only when visitors arrive.</p>
+                            <p style="border-left: 3px solid var(--primary-color-start); padding-left: 10px; margin-top: 10px;">
+                                <strong>KEY IMPLEMENTATION:</strong> Utilized <strong>AWS Lambda</strong> to apply an S3 public-read policy on request. Integrated <strong>EventBridge Scheduler</strong> with an upsert/debounce pattern to extend sessions during active traffic and trigger an automated shutdown after 30 minutes of inactivity, guaranteeing zero idle costs.
+                            </p>
+                        </div>
+
+                        <div style="margin-top: auto; margin-bottom: 35px;">
+                            <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--light-text-color); margin-bottom: 5px;">Tech Stack:</p>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">EventBridge</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">AWS Lambda</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">Amazon S3</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 5px; margin-bottom: 5px; display: inline-block;">DynamoDB</span>
+                            <span style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color-start); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-bottom: 5px; display: inline-block;">Formspree</span>
+                        </div>
+
+                        <div class="project-links">
+                            <a href="https://github.com/Sayyaddsameer/OnDemand-Portfolio" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> View Architecture</a>
                         </div>
                     </div>
                 </div>
                 
             </div>
+        </div>
+        <!-- Project Carousel Controls -->
+        <div class="project-pagination">
+            <span class="project-counter" id="projectCounter">01 / 10</span>
+            <div class="project-dots" id="projectDots"></div>
         </div>
     </div>
 </section>
@@ -1417,7 +1722,7 @@
                 <a href="https://github.com/Sayyaddsameer" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
             </div>
             <p>&copy; 2026 Sameer Sayyad</p>
-            <p style="font-size: 0.8rem; color: var(--light-text-color); margin-top: 10px;">Last updated on July 13, 2026</p>
+            <p style="font-size: 0.8rem; color: var(--light-text-color); margin-top: 10px;">Last updated in November 2026</p>
         </div>
     </footer>
 
@@ -1547,35 +1852,55 @@
             // =================================================================
             const projectTrack = document.getElementById('projectTrack');
             const projectCards = document.querySelectorAll('.project-card');
+            const projectDotsContainer = document.getElementById('projectDots');
+            const counterEl = document.getElementById('projectCounter');
+
+            // Initialize Project Dots
+            if (projectDotsContainer && projectCards.length > 0) {
+                projectDotsContainer.innerHTML = '';
+                projectCards.forEach((card, idx) => {
+                    const dot = document.createElement('button');
+                    dot.className = 'project-dot' + (idx === 0 ? ' active' : '');
+                    dot.setAttribute('aria-label', `Navigate to project ${idx + 1}`);
+                    dot.addEventListener('click', () => {
+                        card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                    });
+                    projectDotsContainer.appendChild(dot);
+                });
+            }
             
             function updateProjectCards() {
                 if (!projectTrack) return;
                 
                 // Get center of the visible track
                 const trackCenter = projectTrack.getBoundingClientRect().left + projectTrack.offsetWidth / 2;
+                let closestIndex = 0;
+                let minDistance = Infinity;
                 
-                projectCards.forEach(card => {
+                projectCards.forEach((card, index) => {
                     const cardRect = card.getBoundingClientRect();
                     const cardCenter = cardRect.left + cardRect.width / 2;
-                    
-                    // Calculate distance from center
                     const dist = Math.abs(trackCenter - cardCenter);
-                    const scaleZone = cardRect.width; // Distance within which scaling happens
                     
-                    if (dist < scaleZone) {
-                        // Card is near center: Calculate scale based on distance
-                        // Normalized distance (0 at center, 1 at edge)
-                        
-                        // We want just the class toggle for performance, but CSS transition handles smooth morph
-                        // Threshold for "Active"
-                        if (dist < cardRect.width / 2) {
-                             card.classList.add('active-card');
-                        } else {
-                             card.classList.remove('active-card');
-                        }
-                    } else {
-                        card.classList.remove('active-card');
+                    if (dist < minDistance) {
+                        minDistance = dist;
+                        closestIndex = index;
                     }
+
+                    if (dist < cardRect.width / 2) {
+                         card.classList.add('active-card');
+                    } else {
+                         card.classList.remove('active-card');
+                    }
+                });
+
+                // Update counter & active dot
+                if (counterEl) {
+                    counterEl.textContent = `${String(closestIndex + 1).padStart(2, '0')} / ${String(projectCards.length).padStart(2, '0')}`;
+                }
+                const dots = document.querySelectorAll('.project-dot');
+                dots.forEach((dot, idx) => {
+                    dot.classList.toggle('active', idx === closestIndex);
                 });
             }
             
@@ -1587,9 +1912,6 @@
                 
                 // Run once on load to center initial card
                 updateProjectCards();
-                
-                // Optional: Center the track initially
-                // projectTrack.scrollLeft = (projectTrack.scrollWidth - projectTrack.clientWidth) / 2;
             }
 
             // Button Logic
@@ -1622,23 +1944,25 @@
 
             setActiveLink(document.querySelector('.nav-link[href="#hero"]'));
             
-            // AWS Contact Form Logic
+            // =================================================================
+            // 1. ZERO-AWS CONTACT FORM (Formspree Integration)
+            // =================================================================
             const contactForm = document.getElementById('contact-form');
             const formStatus = document.getElementById('form-status');
             const submitBtn = document.getElementById('submit-btn');
 
-            if(contactForm) {
+            if (contactForm) {
                 contactForm.addEventListener('submit', function(e) {
                     e.preventDefault();
-                    const apiEndpoint = 'https://2dubub6pbj.execute-api.us-east-1.amazonaws.com/contact';
+                    
                     const formData = new FormData(this);
                     const data = {};
                     formData.forEach((value, key) => { data[key] = value; });
 
-                    // Honeypot: if the hidden field is filled, silently drop (likely a bot).
+                    // Honeypot check (stealth bot mitigation)
                     if (data.company) {
                         formStatus.textContent = "Message sent successfully!";
-                        formStatus.style.color = 'green';
+                        formStatus.style.color = '#10B981';
                         contactForm.reset();
                         return;
                     }
@@ -1646,7 +1970,7 @@
 
                     if (!data.name || !data.email || !data.message) {
                         formStatus.textContent = 'Please fill out all fields.';
-                        formStatus.style.color = 'red';
+                        formStatus.style.color = '#EF4444';
                         return;
                     }
 
@@ -1654,24 +1978,32 @@
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
                     formStatus.textContent = '';
 
-                    fetch(apiEndpoint, {
+                    // Formspree submission endpoint
+                    fetch('https://formspree.io/f/xvkzlopj', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(data),
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name: data.name,
+                            email: data.email,
+                            message: data.message
+                        })
                     })
                     .then(async response => {
-                        const respData = await response.json();
-                        if (!response.ok) throw new Error(respData.error || 'Server error');
-                        return respData;
+                        const json = await response.json();
+                        if (response.ok) {
+                            formStatus.textContent = "Message sent successfully! I will get back to you soon.";
+                            formStatus.style.color = '#10B981';
+                            contactForm.reset();
+                        } else {
+                            throw new Error(json.errors ? json.errors.map(err => err.message).join(', ') : 'Submission failed');
+                        }
                     })
-                    .then(respData => {
-                        formStatus.textContent = respData.message || "Message sent successfully!";
-                        formStatus.style.color = 'green';
-                        contactForm.reset();
-                    })
-                    .catch(error => {
-                        formStatus.textContent = error.message || "An error occurred. Please try again later.";
-                        formStatus.style.color = 'red';
+                    .catch(err => {
+                        const mailtoUrl = `mailto:sayyadsameerm3@gmail.com?subject=${encodeURIComponent("Portfolio Message from " + data.name)}&body=${encodeURIComponent("Name: " + data.name + "\nEmail: " + data.email + "\n\nMessage:\n" + data.message)}`;
+                        formStatus.innerHTML = `Unable to send via form right now. <a href="${mailtoUrl}" style="color:var(--primary-color-start); text-decoration:underline; font-weight:600;">Click here to send directly via Email</a>`;
                     })
                     .finally(() => {
                         submitBtn.disabled = false;
@@ -1680,13 +2012,10 @@
                 });
             }
 
-            /* =================================================================
-               CODING PORTFOLIO — Live Stats JS
-               ================================================================= */
+            // =================================================================
+            // 2. ZERO-AWS CODING PORTFOLIO (Instant Verified Stats)
+            // =================================================================
             (function () {
-                // ── API endpoint (same API Gateway, new route) ────────────────
-                const STATS_API = 'https://2dubub6pbj.execute-api.us-east-1.amazonaws.com/coding-stats';
-
                 const CARDS = {
                     leetcode:   { cardId: 'cp-lc',  statId: 'cp-lc-stat'  },
                     codeforces: { cardId: 'cp-cf',  statId: 'cp-cf-stat'  },
@@ -1695,12 +2024,71 @@
                     hackerrank: { cardId: 'cp-hr',  statId: 'cp-hr-stat'  },
                 };
 
-                let globalStats = null;
+                // Verified live profile data (zero AWS required)
+                const BASE_STATS = {
+                    leetcode: {
+                        platform: 'LeetCode',
+                        url: 'https://leetcode.com/u/sayyadsameerm3/',
+                        total: 246,
+                        easy: 187,
+                        medium: 55,
+                        hard: 4,
+                        ranking: 673937,
+                        streak: 15,
+                        totalActiveDays: 85,
+                        activeBadge: '50 Days Badge'
+                    },
+                    codeforces: {
+                        platform: 'Codeforces',
+                        url: 'https://codeforces.com/profile/sayyad_sameer',
+                        rating: 880,
+                        maxRating: 880,
+                        rank: 'newbie',
+                        maxRank: 'newbie',
+                        solved: 42,
+                        contribution: 0
+                    },
+                    codechef: {
+                        platform: 'CodeChef',
+                        url: 'https://www.codechef.com/users/sayyadsameer',
+                        rating: 1409,
+                        maxRating: 1409,
+                        stars: 2,
+                        globalRank: 4127,
+                        solved: 659
+                    },
+                    gfg: {
+                        platform: 'GeeksForGeeks',
+                        url: 'https://www.geeksforgeeks.org/user/sayyadsameer/',
+                        solved: 115,
+                        score: 115,
+                        basic: 32,
+                        easy: 65,
+                        medium: 17,
+                        hard: 1,
+                        streak: 5
+                    },
+                    hackerrank: {
+                        platform: 'HackerRank',
+                        url: 'https://www.hackerrank.com/profile/sayyadsameerm3',
+                        totalBadges: 6,
+                        totalStars: 21,
+                        badges: [
+                            { name: 'Problem Solving', stars: 4, solved: 36, category: 'Core Problem Solving' },
+                            { name: 'SQL', stars: 4, solved: 40, category: 'Database Skills' },
+                            { name: 'C', stars: 4, solved: 15, category: 'Language Proficiency' },
+                            { name: 'Python', stars: 3, solved: 16, category: 'Language Proficiency' },
+                            { name: 'Java', stars: 3, solved: 10, category: 'Language Proficiency' },
+                            { name: 'C++', stars: 3, solved: 8, category: 'Language Proficiency' }
+                        ]
+                    }
+                };
+
+                let globalStats = { stats: BASE_STATS };
                 let activePlatform = null;
 
-                // ── Animated counter ─────────────────────────────────────────
                 function animateCounter(el, target, duration) {
-                    duration = duration || 1200;
+                    duration = duration || 1000;
                     const start = performance.now();
                     (function step(now) {
                         const p = Math.min((now - start) / duration, 1);
@@ -1710,22 +2098,17 @@
                     })(start);
                 }
 
-                // ── Codeforces rank → colour ─────────────────────────────────
                 function cfColor(rank) {
                     var r = (rank || '').toLowerCase();
-                    if (r.includes('legendary'))                   return '#FF0000';
-                    if (r.includes('international grandmaster'))   return '#FF3333';
-                    if (r.includes('grandmaster'))                 return '#FF0000';
-                    if (r.includes('international master'))        return '#FF8C00';
-                    if (r.includes('master'))                      return '#FF8C00';
-                    if (r.includes('candidate master'))            return '#AA00AA';
-                    if (r.includes('expert'))                      return '#4169E1';
-                    if (r.includes('specialist'))                  return '#03A89E';
-                    if (r.includes('pupil'))                       return '#008000';
+                    if (r.includes('legendary') || r.includes('grandmaster')) return '#FF0000';
+                    if (r.includes('master')) return '#FF8C00';
+                    if (r.includes('candidate master')) return '#AA00AA';
+                    if (r.includes('expert')) return '#4169E1';
+                    if (r.includes('specialist')) return '#03A89E';
+                    if (r.includes('pupil')) return '#008000';
                     return '#808080';
                 }
 
-                // ── Star display ──────────────────────────────────────────────
                 function stars(n, max) {
                     max = max || 5;
                     var h = '<span class="cp-stars">';
@@ -1734,13 +2117,6 @@
                     return h + '</span>';
                 }
 
-                // ── Visit button ──────────────────────────────────────────────
-                function visitBtn(url) {
-                    return '<a href="' + url + '" target="_blank" rel="noopener noreferrer" class="btn cp-visit-btn">'
-                        + '<i class="fas fa-arrow-up-right-from-square"></i> Visit Profile</a>';
-                }
-
-                // ── Gradient banner helper ────────────────────────────────────
                 function banner(g1, g2, icon, title, url) {
                     return '<div class="cp-banner" style="background:linear-gradient(135deg,' + g1 + ' 0%,' + g2 + ' 100%)">'
                         + '<div class="cp-banner-title"><i class="' + icon + '"></i>' + title + '</div>'
@@ -1749,7 +2125,6 @@
                         + '</div>';
                 }
 
-                // ── Difficulty bar row (with count + %) ───────────────────────
                 function diffRow(label, cls, count, total) {
                     var pct = total ? Math.round((count / total) * 100) : 0;
                     return '<div class="cp-diff-row">'
@@ -1759,7 +2134,6 @@
                         + '</div>';
                 }
 
-                // ── HackerRank star row helper ────────────────────────────────
                 function hrStars(n, max) {
                     max = max || 5; var h = '<div class="cp-badge-stars-row">';
                     for (var i = 1; i <= max; i++)
@@ -1767,7 +2141,6 @@
                     return h + '</div>';
                 }
 
-                // ── Platform renderers ────────────────────────────────────────
                 function renderLeetcode(d) {
                     var total = d.total || 0;
                     return banner('#FFA116','#e07b00','fas fa-code','LeetCode', d.url)
@@ -1826,11 +2199,9 @@
                         + '<div class="cp-stats-grid">'
                         + (d.solved        != null ? '<div class="cp-stat-box"><span class="cp-stat-num" data-counter="' + d.solved + '">0</span><span class="cp-stat-label">Problems Solved</span></div>' : '')
                         + (d.score         != null ? '<div class="cp-stat-box"><span class="cp-stat-num" data-counter="' + d.score + '">0</span><span class="cp-stat-label">Coding Score</span></div>' : '')
-                        + (d.instituteRank != null ? '<div class="cp-stat-box"><span class="cp-stat-num">#' + d.instituteRank + '</span><span class="cp-stat-label">Institute Rank</span></div>' : '')
                         + (d.streak        != null ? '<div class="cp-stat-box"><span class="cp-stat-num">' + d.streak + ' &#x1F525;</span><span class="cp-stat-label">Day Streak</span></div>' : '')
                         + '</div>'
                         + (hasBars ? '<div class="cp-section-label">Difficulty Breakdown</div><div class="cp-difficulty-bars">'
-                            + (d.school != null ? diffRow('School', 'school', d.school || 0, total) : '')
                             + (d.basic  != null ? diffRow('Basic',  'basic',  d.basic  || 0, total) : '')
                             + (d.easy   != null ? diffRow('Easy',   'easy',   d.easy   || 0, total) : '')
                             + (d.medium != null ? diffRow('Medium', 'medium', d.medium || 0, total) : '')
@@ -1841,39 +2212,23 @@
 
                 function renderHackerRank(d) {
                     var badges = d.badges || [];
-                    // Only earned badges (stars > 0) — filter here as safety net
-                    var earned = badges.filter(function(b){ return (b.stars || 0) > 0; });
-                    var totalStars = earned.reduce(function(s,b){ return s + (b.stars||0); }, 0);
+                    var totalStars = badges.reduce(function(s, b) { return s + (b.stars || 0); }, 0);
                     return banner('#00c853','#00875a','fab fa-hackerrank','HackerRank', d.url)
                         + '<div class="cp-detail-body">'
                         + '<div class="cp-stats-grid">'
-                        + '<div class="cp-stat-box"><span class="cp-stat-num">' + earned.length + '</span><span class="cp-stat-label">Badges Earned</span></div>'
+                        + '<div class="cp-stat-box"><span class="cp-stat-num">' + badges.length + '</span><span class="cp-stat-label">Badges Earned</span></div>'
                         + '<div class="cp-stat-box"><span class="cp-stat-num">' + totalStars + '</span><span class="cp-stat-label">Total Stars &#x2B50;</span></div>'
                         + '</div>'
-                        + (earned.length > 0
-                            ? '<div class="cp-section-label">Earned Badges</div><div class="cp-badge-grid">'
-                              + earned.map(function(b) {
-                                  var meta = (b.solved > 0 ? b.solved + ' solved' : '') + (b.category ? (b.solved > 0 ? ' &bull; ' : '') + b.category : '');
-                                  return '<div class="cp-badge-card">'
-                                      + '<div class="cp-badge-top"><i class="fas fa-award cp-badge-icon"></i><span class="cp-badge-name">' + (b.name || '') + '</span></div>'
-                                      + hrStars(b.stars || 0)
-                                      + (meta ? '<div class="cp-badge-meta">' + meta + '</div>' : '')
-                                      + '</div>';
-                              }).join('')
-                              + '</div>'
-                            : '<p style="color:var(--light-text-color);font-size:0.85rem;">No earned badges found.</p>')
-                        + '</div>';
-                }
-
-                function renderError(d) {
-                    return '<div class="cp-banner" style="background:linear-gradient(135deg,#555,#333)">'
-                        + '<div class="cp-banner-title"><i class="fas fa-circle-exclamation"></i>' + d.platform + '</div>'
-                        + '<a href="' + d.url + '" target="_blank" rel="noopener noreferrer" class="cp-banner-btn"><i class="fas fa-arrow-up-right-from-square"></i> Visit Profile</a>'
+                        + '<div class="cp-section-label">Earned Badges</div><div class="cp-badge-grid">'
+                        + badges.map(function(b) {
+                            var meta = (b.solved > 0 ? b.solved + ' solved' : '') + (b.category ? ' &bull; ' + b.category : '');
+                            return '<div class="cp-badge-card">'
+                                + '<div class="cp-badge-top"><i class="fas fa-award cp-badge-icon"></i><span class="cp-badge-name">' + (b.name || '') + '</span></div>'
+                                + hrStars(b.stars || 0)
+                                + (meta ? '<div class="cp-badge-meta">' + meta + '</div>' : '')
+                                + '</div>';
+                        }).join('')
                         + '</div>'
-                        + '<div class="cp-detail-body cp-error-state">'
-                        + '<i class="fas fa-triangle-exclamation" style="font-size:2rem;display:block;margin-bottom:12px;color:#f5a623;"></i>'
-                        + '<p style="font-weight:600;">Could not fetch live data right now.</p>'
-                        + '<p style="font-size:0.83rem;margin-top:6px;">Click <em>Visit Profile</em> above to see your stats directly.</p>'
                         + '</div>';
                 }
 
@@ -1885,38 +2240,32 @@
                     hackerrank: renderHackerRank,
                 };
 
-                // ── Update compact card headline ──────────────────────────────
                 function setHeadline(platform, d) {
                     var el = document.getElementById(CARDS[platform].statId);
                     if (!el) return;
-                    if (d.error) {
-                        el.innerHTML = '<span style="color:var(--light-text-color);font-size:0.74rem;">Unavailable</span>';
-                        return;
-                    }
                     var txt = '';
                     if (platform === 'leetcode')   txt = (d.total || 0) + ' Solved';
                     if (platform === 'codeforces') txt = 'Rating ' + (d.rating != null ? d.rating : '—');
                     if (platform === 'codechef')   txt = (d.stars ? '★'.repeat(d.stars) + ' ' : '') + (d.rating || '');
                     if (platform === 'gfg')        txt = (d.solved != null ? d.solved : '—') + ' Solved';
-                    if (platform === 'hackerrank') txt = ((d.totalBadges != null ? d.totalBadges : (d.badges || []).length)) + ' Badges';
+                    if (platform === 'hackerrank') txt = (d.totalBadges || (d.badges || []).length) + ' Badges';
                     el.textContent = txt;
                 }
 
-                // ── Show detail panel ─────────────────────────────────────────
                 function showDetail(platform, d) {
                     var inner  = document.getElementById('cpDetailInner');
                     var panel  = document.getElementById('cpDetailPanel');
                     var render = RENDERERS[platform];
-                    inner.innerHTML = d.error ? renderError(d) : render(d);
+                    inner.innerHTML = render(d);
                     panel.classList.add('open');
                     setTimeout(function () {
                         panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     }, 60);
-                    // Animate counters
+
                     inner.querySelectorAll('[data-counter]').forEach(function (el) {
                         animateCounter(el, parseInt(el.dataset.counter, 10));
                     });
-                    // Animate difficulty bars (slight delay so panel is open)
+
                     setTimeout(function () {
                         inner.querySelectorAll('[data-width]').forEach(function (bar) {
                             bar.style.width = bar.dataset.width;
@@ -1924,7 +2273,6 @@
                     }, 120);
                 }
 
-                // ── Card click handler ────────────────────────────────────────
                 function onCard(platform) {
                     var cfg  = CARDS[platform];
                     var card = document.getElementById(cfg.cardId);
@@ -1946,18 +2294,10 @@
                     card.setAttribute('aria-expanded', 'true');
                     activePlatform = platform;
 
-                    if (globalStats && globalStats.stats && globalStats.stats[platform]) {
-                        showDetail(platform, globalStats.stats[platform]);
-                    } else {
-                        document.getElementById('cpDetailInner').innerHTML =
-                            '<div style="text-align:center;padding:30px;color:var(--light-text-color);">'
-                            + '<i class="fas fa-spinner fa-spin" style="font-size:1.5rem;display:block;margin-bottom:10px;"></i>'
-                            + 'Fetching live data&hellip;</div>';
-                        panel.classList.add('open');
-                    }
+                    showDetail(platform, globalStats.stats[platform]);
                 }
 
-                // ── Init ──────────────────────────────────────────────────────
+                // ── Init: Instantly populate with zero loading delay ───────────
                 Object.keys(CARDS).forEach(function (p) {
                     var card = document.getElementById(CARDS[p].cardId);
                     if (!card) return;
@@ -1965,25 +2305,30 @@
                     card.addEventListener('keydown', function (e) {
                         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onCard(p); }
                     });
+                    // Set headlines immediately
+                    if (globalStats.stats[p]) {
+                        setHeadline(p, globalStats.stats[p]);
+                    }
                 });
 
-                fetch(STATS_API)
-                    .then(function (r) { return r.json(); })
-                    .then(function (data) {
-                        globalStats = data;
-                        Object.keys(CARDS).forEach(function (p) {
-                            if (data.stats && data.stats[p]) setHeadline(p, data.stats[p]);
+                // Live stats: fetch all 5 platforms via Vercel serverless function
+                fetch('/api/stats')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (!data || !data.stats) return;
+                        Object.keys(data.stats).forEach(function (key) {
+                            if (!data.stats[key]) return;
+                            // Merge live data over BASE_STATS (preserves url/platform fields)
+                            globalStats.stats[key] = Object.assign(
+                                {}, globalStats.stats[key], data.stats[key]
+                            );
+                            setHeadline(key, globalStats.stats[key]);
                         });
-                        if (activePlatform && data.stats && data.stats[activePlatform]) {
-                            showDetail(activePlatform, data.stats[activePlatform]);
+                        // If user already has a detail panel open, refresh it
+                        if (activePlatform && globalStats.stats[activePlatform]) {
+                            showDetail(activePlatform, globalStats.stats[activePlatform]);
                         }
-                    })
-                    .catch(function () {
-                        Object.keys(CARDS).forEach(function (p) {
-                            var el = document.getElementById(CARDS[p].statId);
-                            if (el) el.innerHTML = '<span style="color:var(--light-text-color);font-size:0.74rem;">Unavailable</span>';
-                        });
-                    });
+                    }).catch(() => { /* fallback: BASE_STATS already rendered */ });
             })();
         });
     </script>
